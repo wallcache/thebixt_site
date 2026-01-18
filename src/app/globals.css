@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+:root {
+  --cream: #E6E2C5;
+  --burgundy: #2B4593;
+  --teal: #0d3d3a;
+}
+
+@theme inline {
+  --color-cream: var(--cream);
+  --color-burgundy: var(--burgundy);
+  --color-teal: var(--teal);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-serif);
+}
+
+body {
+  background: var(--cream);
+  color: var(--burgundy);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  position: relative;
+}
+
+
+/* Text selection highlight */
+::selection {
+  background: #E07A5F;
+  color: #fff;
+}
+
+::-moz-selection {
+  background: #E07A5F;
+  color: #fff;
+}
+
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out forwards;
+}
+
+.font-serif {
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+.bg-cream {
+  background-color: var(--cream);
+}
+
+.text-burgundy {
+  color: var(--burgundy);
+}
+
+.border-burgundy {
+  border-color: var(--burgundy);
+}
+
+.bg-burgundy {
+  background-color: var(--burgundy);
+}
+
+.text-cream {
+  color: var(--cream);
+}
+
+.bg-teal {
+  background-color: var(--teal);
+}
+
+.text-teal {
+  color: var(--teal);
+}
+
+@keyframes loadingBar {
+  0% {
+    width: 0%;
+    margin-left: 0%;
+  }
+  50% {
+    width: 60%;
+    margin-left: 20%;
+  }
+  100% {
+    width: 0%;
+    margin-left: 100%;
+  }
+}
