@@ -1,15 +1,35 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+/* Leaflet custom styles */
+.leaflet-container {
+  background: #f5f3e7;
+  font-family: inherit;
+}
+
+.custom-marker {
+  background: transparent;
+  border: none;
+  overflow: visible !important;
+}
+
+.leaflet-control-attribution {
+  display: none;
+}
 
 :root {
   --cream: #E6E2C5;
   --burgundy: #2B4593;
   --teal: #0d3d3a;
+  --hot-pink: #FF10F0;
+  --pink-glow: rgba(255, 16, 240, 0.3);
 }
 
 @theme inline {
   --color-cream: var(--cream);
   --color-burgundy: var(--burgundy);
   --color-teal: var(--teal);
+  --color-hot-pink: var(--hot-pink);
   --font-sans: var(--font-inter);
   --font-serif: var(--font-serif);
 }
@@ -19,6 +39,41 @@ body {
   color: var(--burgundy);
   font-family: var(--font-sans), system-ui, sans-serif;
   position: relative;
+  cursor: none !important;
+}
+
+*,
+*::before,
+*::after,
+a,
+button,
+input,
+textarea,
+select,
+[role="button"],
+[type="button"],
+[type="submit"],
+[tabindex] {
+  cursor: none !important;
+}
+
+html {
+  cursor: none !important;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  *,
+  *::before,
+  *::after,
+  html,
+  body,
+  a,
+  button,
+  input,
+  textarea,
+  select {
+    cursor: auto !important;
+  }
 }
 
 
@@ -79,6 +134,18 @@ body {
 
 .text-teal {
   color: var(--teal);
+}
+
+.bg-hot-pink {
+  background-color: var(--hot-pink);
+}
+
+.text-hot-pink {
+  color: var(--hot-pink);
+}
+
+.border-hot-pink {
+  border-color: var(--hot-pink);
 }
 
 @keyframes loadingBar {

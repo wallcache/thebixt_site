@@ -6,50 +6,59 @@ interface TypewriterTextProps {
   text: string;
   className?: string;
   delay?: number;
+  wordByWord?: boolean;
+  staggerDelay?: number;
 }
 
-export default function TypewriterText({ text, className = "", delay = 0 }: TypewriterTextProps) {
+export default function TypewriterText({
+  text,
+  className = "",
+  delay = 0,
+  wordByWord = false,
+  staggerDelay = 0.08
+}: TypewriterTextProps) {
+  if (!wordByWord) {
+    return (
+      <motion.span
+        className={className}
+        initial={{ opacity: 0, y: 8 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4, delay, ease: "easeOut" }}
+      >
+        {text}
+      </motion.span>
+    );
+  }
+
   const words = text.split(" ");
-
-  const container = {
-    hidden: { opacity: 0 },
-    visible: (i = 1) => ({
-      opacity: 1,
-      transition: { staggerChildren: 0.12, delayChildren: delay + 0.2 },
-    }),
-  };
-
-  const child = {
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring" as const,
-        damping: 12,
-        stiffness: 100,
-      },
-    },
-    hidden: {
-      opacity: 0,
-      y: 20,
-    },
-  };
 
   return (
     <motion.span
       className={className}
-      variants={container}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }}
+      viewport={{ once: true }}
     >
       {words.map((word, index) => (
         <motion.span
           key={index}
-          variants={child}
-          className="inline-block mr-[0.25em]"
+          className="inline-block"
+          variants={{
+            hidden: { opacity: 0, y: 12 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: {
+                duration: 0.4,
+                delay: delay + index * staggerDelay,
+                ease: [0.25, 0.1, 0.25, 1],
+              },
+            },
+          }}
         >
           {word}
+          {index < words.length - 1 && "\u00A0"}
         </motion.span>
       ))}
     </motion.span>

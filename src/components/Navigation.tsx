@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { siteConfig } from "@/data";
+import NavLink from "./NavLink";
 
 interface NavigationProps {
   isDark?: boolean;
@@ -28,7 +29,7 @@ export default function Navigation({ isDark = false, isThemeChanging = false }: 
 
   return (
     <motion.nav
-      className="fixed top-0 left-0 right-0 z-40 backdrop-blur-sm"
+      className="fixed top-0 left-0 right-0 z-[50] backdrop-blur-sm"
       style={{ backgroundColor: displayDark ? "rgba(43, 69, 147, 0.95)" : "rgba(230, 226, 197, 0.95)" }}
       animate={{
         y: isThemeChanging ? -30 : 0,
@@ -50,26 +51,27 @@ export default function Navigation({ isDark = false, isThemeChanging = false }: 
           </span>
         </Link>
         <div className="flex items-center gap-6">
-          <Link
+          <NavLink
             href="/episodes"
-            className={`text-sm tracking-wide transition-colors duration-300 hover:opacity-70 ${
-              displayDark
-                ? pathname === "/episodes" ? "text-cream" : "text-cream/60"
-                : pathname === "/episodes" ? "text-burgundy" : "text-burgundy/60"
-            }`}
+            isActive={pathname === "/episodes"}
+            isDark={displayDark}
           >
-            All Episodes
-          </Link>
-          <Link
+            Past Episodes
+          </NavLink>
+          <NavLink
+            href="/brands"
+            isActive={pathname === "/brands"}
+            isDark={displayDark}
+          >
+            Brands
+          </NavLink>
+          <NavLink
             href="/about"
-            className={`text-sm tracking-wide transition-colors duration-300 hover:opacity-70 ${
-              displayDark
-                ? pathname === "/about" ? "text-cream" : "text-cream/60"
-                : pathname === "/about" ? "text-burgundy" : "text-burgundy/60"
-            }`}
+            isActive={pathname === "/about"}
+            isDark={displayDark}
           >
             About
-          </Link>
+          </NavLink>
           <motion.a
             href={siteConfig.whatsappLink}
             target="_blank"

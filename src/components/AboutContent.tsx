@@ -7,7 +7,7 @@ export default function AboutContent() {
   return (
     <div className="max-w-6xl mx-auto px-6 md:px-12 py-16">
       <h1 className="font-serif text-5xl md:text-6xl text-burgundy mb-16">
-        <TypewriterText text="About…" />
+        <TypewriterText text="About…" wordByWord />
       </h1>
 
       <div className="grid md:grid-cols-2 gap-12 md:gap-16">
@@ -36,7 +36,7 @@ export default function AboutContent() {
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             <h2 className="font-serif text-2xl md:text-3xl text-burgundy mb-6">
-              <TypewriterText text="Coffee? Or something stronger…" delay={0.2} />
+              <TypewriterText text="Coffee? Or something stronger…" wordByWord delay={0.2} />
             </h2>
             <p className="text-burgundy/80 text-lg leading-relaxed">
               If you're a brand that refuses to compromise, an actor in search of something real, or simply possess good taste… we should talk.

@@ -7,16 +7,27 @@ import LoadingScreen from "./LoadingScreen";
 import Navigation from "./Navigation";
 import PageTransition from "./PageTransition";
 import BlobTransition from "./BlobTransition";
-import GetSmokyButton from "./GetSmokyButton";
+import SmokyLogo from "./SmokyLogo";
+import CustomCursor from "./CustomCursor";
+import WaterRipple from "./WaterRipple";
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
-  const [bgHovered, setBgHovered] = useState(false);
+  const [showSmokyLogo, setShowSmokyLogo] = useState(false);
   const pathname = usePathname();
   const isEpisodePage = pathname.startsWith("/episode/");
   const prevIsEpisodePage = useRef(isEpisodePage);
   const [isThemeChanging, setIsThemeChanging] = useState(false);
   const [showBlobTransition, setShowBlobTransition] = useState(false);
+
+  // Handle loading complete - show SmokyLogo after a brief delay
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+    // Brief delay before showing the persistent logo
+    setTimeout(() => {
+      setShowSmokyLogo(true);
+    }, 100);
+  };
 
   useEffect(() => {
     if (prevIsEpisodePage.current !== isEpisodePage) {
@@ -43,27 +54,37 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
 
   return (
     <>
-      <BlobTransition show={showBlobTransition} onComplete={() => setShowBlobTransition(false)} isDark={isEpisodePage} />
-      {isLoading && <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />}
+      <CustomCursor />
+      <WaterRipple />
+
+      {/* Blob transition for theme changes */}
+      <BlobTransition
+        show={showBlobTransition}
+        onComplete={() => setShowBlobTransition(false)}
+        isDark={isEpisodePage}
+      />
+
+      {/* Loading screen */}
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 1, pointerEvents: "auto" as const }}
+            exit={{ opacity: 0, pointerEvents: "none" as const }}
+            transition={{ duration: 0.5 }}
+            className="fixed inset-0 z-50"
+          >
+            <LoadingScreen onLoadingComplete={handleLoadingComplete} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Persistent Smoky Logo - shows after loading */}
+      {showSmokyLogo && <SmokyLogo isDark={isEpisodePage} />}
+
+      {/* Main content */}
       <div
         className={`transition-opacity duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
-        onMouseMove={() => !bgHovered && setBgHovered(true)}
       >
-        {/* Subtle tube map background for light theme */}
-        {!isEpisodePage && (
-          <motion.div
-            className="fixed inset-0 z-0 pointer-events-none"
-            style={{
-              backgroundImage: "url(/tube-map.webp)",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
-            initial={{ opacity: 0.03 }}
-            animate={{ opacity: bgHovered ? 0.07 : 0.03 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          />
-        )}
         <Navigation isDark={isEpisodePage} isThemeChanging={isThemeChanging} />
         <main
           className="pt-20 min-h-screen relative"
@@ -73,9 +94,6 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
             <PageTransition>{children}</PageTransition>
           </AnimatePresence>
         </main>
-        <div className="fixed bottom-12 left-14 z-50">
-          <GetSmokyButton variant={isEpisodePage ? "dark" : "light"} />
-        </div>
       </div>
     </>
   );

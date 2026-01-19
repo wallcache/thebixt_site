@@ -35,8 +35,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${cormorant.variable} ${reenieBeanie.variable} antialiased`}>
+    <html lang="en" style={{ cursor: "none" }}>
+      <head>
+        <style>{`
+          *, *::before, *::after { cursor: none !important; }
+          @media (hover: none) and (pointer: coarse) {
+            *, *::before, *::after { cursor: auto !important; }
+          }
+        `}</style>
+      </head>
+      <body
+        className={`${inter.variable} ${cormorant.variable} ${reenieBeanie.variable} antialiased`}
+        style={{ cursor: "none" }}
+      >
         <ClientWrapper>{children}</ClientWrapper>
       </body>
     </html>

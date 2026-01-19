@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { episodes } from "@/data";
+import { getAllEpisodes, getEpisodeBySlug } from "@/lib/episodes";
 import EpisodeContent from "@/components/EpisodeContent";
 
 interface Props {
@@ -7,6 +7,7 @@ interface Props {
 }
 
 export async function generateStaticParams() {
+  const episodes = getAllEpisodes();
   return episodes.map((episode) => ({
     slug: episode.slug,
   }));
@@ -14,7 +15,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const episode = episodes.find((ep) => ep.slug === slug);
+  const episode = getEpisodeBySlug(slug);
 
   if (!episode) {
     return { title: "Episode Not Found" };
@@ -28,11 +29,12 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function EpisodePage({ params }: Props) {
   const { slug } = await params;
-  const episode = episodes.find((ep) => ep.slug === slug);
+  const episode = getEpisodeBySlug(slug);
+  const allEpisodes = getAllEpisodes();
 
   if (!episode) {
     notFound();
   }
 
-  return <EpisodeContent episode={episode} />;
+  return <EpisodeContent episode={episode} allEpisodes={allEpisodes} />;
 }
