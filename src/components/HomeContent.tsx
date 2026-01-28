@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import BackgroundVideo from "@/components/BackgroundVideo";
 import TapedPhoto from "@/components/TapedPhoto";
@@ -52,11 +53,19 @@ const fadeUpSlow = {
 };
 
 export default function HomeContent({ latestEpisode, recentEpisodes }: HomeContentProps) {
-  const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 500], [0, -150]);
-  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
-  const chevronOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+  const heroRef = useRef<HTMLDivElement>(null);
 
+  const { scrollYProgress: heroProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Scale: starts huge (8x), zooms down to 1x over the scroll
+  const heroScale = useTransform(heroProgress, [0, 0.8], [8, 1]);
+  // Opacity of the tagline — fades in at end of zoom
+  const taglineOpacity = useTransform(heroProgress, [0.7, 0.9], [0, 1]);
+  // Chevron opacity — visible only after zoom settles
+  const chevronOpacity = useTransform(heroProgress, [0.85, 0.95], [0, 1]);
   const gridEpisodes = recentEpisodes.slice(1, 5);
 
   const senseLabels = ["See", "Hear", "Try", "Touch"] as const;
@@ -66,39 +75,49 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
     <div className="relative">
       <BackgroundVideo />
 
-      {/* Section 1 — Hero */}
-      <section className="h-screen flex flex-col items-center justify-center relative z-10 overflow-hidden">
-        <motion.div
-          className="flex flex-col items-center"
-          style={{ y: heroY, opacity: heroOpacity }}
-        >
-          <h1 className="font-serif text-7xl md:text-9xl text-burgundy mb-6 tracking-tight">
-            Smoky<span className="text-hot-pink">.</span>
-          </h1>
-          <p className="text-burgundy/50 text-sm tracking-[0.3em] uppercase">
-            Rituals, Reality, and Recipes
-          </p>
-        </motion.div>
-
-        <motion.div
-          className="absolute bottom-10"
-          style={{ opacity: chevronOpacity }}
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="text-burgundy/40"
+      {/* Section 1 — Hero with zoom-through-O */}
+      {/* Tall scroll container to give room for the zoom animation */}
+      <div ref={heroRef} className="relative z-10" style={{ height: "300vh" }}>
+        {/* Sticky wrapper — keeps the logo centered on screen during scroll */}
+        <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+          <motion.div
+            className="flex flex-col items-center"
+            style={{ scale: heroScale }}
           >
-            <path d="M6 9l6 6 6-6" />
-          </svg>
-        </motion.div>
-      </section>
+            <h1 className="font-serif text-7xl md:text-9xl text-burgundy tracking-tight whitespace-nowrap">
+              Smoky<span className="text-hot-pink">.</span>
+            </h1>
+          </motion.div>
+
+          {/* Tagline — fades in after zoom completes */}
+          <motion.p
+            className="text-burgundy/50 text-sm tracking-[0.3em] uppercase mt-6"
+            style={{ opacity: taglineOpacity }}
+          >
+            Rituals, Reality, and Recipes
+          </motion.p>
+
+          {/* Scroll indicator — appears after zoom settles */}
+          <motion.div
+            className="absolute bottom-10"
+            style={{ opacity: chevronOpacity }}
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="text-burgundy/40"
+            >
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </motion.div>
+        </div>
+      </div>
 
       {/* Section 2 — Mission Statement */}
       <section className="min-h-[80vh] flex flex-col items-center justify-center px-6 relative z-10">

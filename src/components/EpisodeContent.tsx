@@ -51,7 +51,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
   }, [prevEpisode, router]);
 
   return (
-    <div ref={containerRef} className="min-h-screen -mt-20 pt-20" style={{ backgroundColor: "#081E28" }}>
+    <div ref={containerRef} className="min-h-screen -mt-20 pt-20">
       {/* Header Image */}
       <div className="flex justify-center pt-8">
         <TapedPhoto
@@ -73,7 +73,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
         >
           <Link
             href="/episodes"
-            className="inline-block text-sm text-cream/60 hover:text-cream transition-colors mb-8"
+            className="inline-block text-sm text-burgundy/60 hover:text-burgundy transition-colors mb-8"
           >
             &larr; Back to episodes
           </Link>
@@ -82,7 +82,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
         <article>
           <header className="mb-12">
             <motion.p
-              className="text-sm text-cream/50 mb-4"
+              className="text-sm text-burgundy/50 mb-4"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -90,17 +90,17 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
             >
               {episode.date}
             </motion.p>
-            <h1 className="font-serif text-3xl md:text-4xl text-cream mb-4">
+            <h1 className="font-serif text-3xl md:text-4xl text-burgundy mb-4">
               <TypewriterText text={episode.title} wordByWord />
             </h1>
-            <p className="text-cream/70 text-lg">
+            <p className="text-burgundy/70 text-lg">
               <TypewriterText text={episode.subtitle} wordByWord delay={0.3} />
             </p>
           </header>
 
           {/* Brief description / excerpt */}
           <motion.p
-            className="text-cream/90 text-lg leading-relaxed mb-12 font-serif italic"
+            className="text-burgundy/90 text-lg leading-relaxed mb-12 font-serif italic"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -117,7 +117,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="font-serif text-xl text-cream/80 mb-6 text-center">
+            <h2 className="font-serif text-xl text-burgundy/80 mb-6 text-center">
               Experience This Episode
             </h2>
             <EpisodeSensesGrid senses={episode.fourSenses} />
@@ -133,7 +133,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
             {episode.content.map((paragraph, index) => (
               <p
                 key={index}
-                className="text-cream/80 leading-relaxed mb-6"
+                className="text-burgundy/80 leading-relaxed mb-6"
               >
                 {paragraph}
               </p>
@@ -142,13 +142,13 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
 
           {episode.images && episode.images.length > 0 && (
             <motion.section
-              className="mt-16 pt-12 border-t border-cream/20"
+              className="mt-16 pt-12 border-t border-burgundy/20"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="font-serif text-2xl text-cream mb-8 text-center">
+              <h2 className="font-serif text-2xl text-burgundy mb-8 text-center">
                 <TypewriterText text="Moments" wordByWord />
               </h2>
               <div className="grid grid-cols-2 gap-4 justify-items-center">
@@ -169,13 +169,13 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
 
           {episode.recipe && (
             <motion.section
-              className="mt-16 pt-12 border-t border-cream/20"
+              className="mt-16 pt-12 border-t border-burgundy/20"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="font-serif text-2xl text-cream mb-8">
+              <h2 className="font-serif text-2xl text-burgundy mb-8">
                 <TypewriterText text={episode.recipe.title} wordByWord />
               </h2>
 
@@ -186,12 +186,12 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
                   viewport={{ once: true }}
                   transition={{ duration: 0.4 }}
                 >
-                  <h3 className="text-sm uppercase tracking-wider text-cream/60 mb-4">
+                  <h3 className="text-sm uppercase tracking-wider text-burgundy/60 mb-4">
                     Ingredients
                   </h3>
                   <ul className="space-y-2">
                     {episode.recipe.ingredients.map((ingredient, index) => (
-                      <li key={index} className="text-cream/80">
+                      <li key={index} className="text-burgundy/80">
                         {ingredient}
                       </li>
                     ))}
@@ -204,13 +204,13 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
                   viewport={{ once: true }}
                   transition={{ delay: 0.1, duration: 0.4 }}
                 >
-                  <h3 className="text-sm uppercase tracking-wider text-cream/60 mb-4">
+                  <h3 className="text-sm uppercase tracking-wider text-burgundy/60 mb-4">
                     Instructions
                   </h3>
                   <ol className="space-y-3">
                     {episode.recipe.instructions.map((instruction, index) => (
-                      <li key={index} className="text-cream/80">
-                        <span className="font-medium text-cream">{index + 1}.</span>{" "}
+                      <li key={index} className="text-burgundy/80">
+                        <span className="font-medium text-burgundy">{index + 1}.</span>{" "}
                         {instruction}
                       </li>
                     ))}
@@ -223,7 +223,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
 
         {/* Footer */}
         <motion.footer
-          className="mt-20 pt-12 border-t border-cream/20"
+          className="mt-20 pt-12 border-t border-burgundy/20"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -237,11 +237,11 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
                   href={`/episode/${prevEpisode.slug}`}
                   className="group block"
                 >
-                  <span className="text-xs uppercase tracking-wider text-cream/40 mb-1 block">
+                  <span className="text-xs uppercase tracking-wider text-burgundy/40 mb-1 block">
                     Previous
                   </span>
-                  <span className="font-serif text-lg text-cream/70 group-hover:text-cream transition-colors">
-                    ← {prevEpisode.title.replace(/^Episode \d+: /, '')}
+                  <span className="font-serif text-lg text-burgundy/70 group-hover:text-burgundy transition-colors">
+                    &larr; {prevEpisode.title.replace(/^Episode \d+: /, '')}
                   </span>
                 </Link>
               )}
@@ -252,11 +252,11 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
                   href={`/episode/${nextEpisode.slug}`}
                   className="group block"
                 >
-                  <span className="text-xs uppercase tracking-wider text-cream/40 mb-1 block">
+                  <span className="text-xs uppercase tracking-wider text-burgundy/40 mb-1 block">
                     Next
                   </span>
-                  <span className="font-serif text-lg text-cream/70 group-hover:text-cream transition-colors">
-                    {nextEpisode.title.replace(/^Episode \d+: /, '')} →
+                  <span className="font-serif text-lg text-burgundy/70 group-hover:text-burgundy transition-colors">
+                    {nextEpisode.title.replace(/^Episode \d+: /, '')} &rarr;
                   </span>
                 </Link>
               )}
@@ -271,21 +271,21 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
               animate={{ opacity: 1 }}
               transition={{ delay: 1 }}
             >
-              <p className="text-cream/30 text-sm mb-2">Scroll down for next episode</p>
+              <p className="text-burgundy/30 text-sm mb-2">Scroll down for next episode</p>
               <motion.div
-                className="text-cream/40 text-2xl"
+                className="text-burgundy/40 text-2xl"
                 animate={{ y: [0, 8, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
               >
-                ↓
+                &darr;
               </motion.div>
             </motion.div>
           )}
 
           {/* Bottom */}
-          <div className="text-center pt-8 pb-4 border-t border-cream/10">
-            <p className="text-cream/30 text-xs">
-              © {new Date().getFullYear()} The Bixt · Rituals, Reality, and Recipes
+          <div className="text-center pt-8 pb-4 border-t border-burgundy/10">
+            <p className="text-burgundy/30 text-xs">
+              &copy; {new Date().getFullYear()} The Bixt &middot; Rituals, Reality, and Recipes
             </p>
           </div>
         </motion.footer>

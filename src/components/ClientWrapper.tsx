@@ -11,6 +11,7 @@ import WaterRipple from "./WaterRipple";
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
+  const isHome = pathname === "/";
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
@@ -40,7 +41,7 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
       >
         <Navigation />
         <main
-          className="pt-20 min-h-screen relative"
+          className={`min-h-screen relative ${isHome ? "" : "pt-20"}`}
           style={{ zIndex: 10 }}
         >
           <AnimatePresence mode="wait">
