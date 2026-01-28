@@ -39,41 +39,6 @@ body {
   color: var(--burgundy);
   font-family: var(--font-sans), system-ui, sans-serif;
   position: relative;
-  cursor: none !important;
-}
-
-*,
-*::before,
-*::after,
-a,
-button,
-input,
-textarea,
-select,
-[role="button"],
-[type="button"],
-[type="submit"],
-[tabindex] {
-  cursor: none !important;
-}
-
-html {
-  cursor: none !important;
-}
-
-@media (hover: none) and (pointer: coarse) {
-  *,
-  *::before,
-  *::after,
-  html,
-  body,
-  a,
-  button,
-  input,
-  textarea,
-  select {
-    cursor: auto !important;
-  }
 }
 
 

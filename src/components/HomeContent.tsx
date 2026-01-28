@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import EpisodeSensesGrid from "@/components/EpisodeSensesGrid";
 import BackgroundVideo from "@/components/BackgroundVideo";
 import TapedPhoto from "@/components/TapedPhoto";
 import { Episode } from "@/lib/episodes";
@@ -86,23 +85,6 @@ export default function HomeContent({ latestEpisode }: HomeContentProps) {
           </div>
         </motion.div>
       </motion.section>
-
-      {/* Four Senses Grid for current episode */}
-      <section className="px-6 md:px-12 py-16 max-w-5xl mx-auto relative z-10">
-        <motion.div
-          className="text-center mb-8"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <h3 className="font-serif text-2xl text-burgundy mb-2">The Four Senses</h3>
-          <p className="text-burgundy/50 text-sm tracking-wider uppercase">
-            Experience this episode
-          </p>
-        </motion.div>
-        <EpisodeSensesGrid senses={latestEpisode.fourSenses} />
-      </section>
 
       {/* View All Episodes Link */}
       <motion.div

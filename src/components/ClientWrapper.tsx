@@ -7,26 +7,18 @@ import LoadingScreen from "./LoadingScreen";
 import Navigation from "./Navigation";
 import PageTransition from "./PageTransition";
 import BlobTransition from "./BlobTransition";
-import SmokyLogo from "./SmokyLogo";
-import CustomCursor from "./CustomCursor";
 import WaterRipple from "./WaterRipple";
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
-  const [showSmokyLogo, setShowSmokyLogo] = useState(false);
   const pathname = usePathname();
   const isEpisodePage = pathname.startsWith("/episode/");
   const prevIsEpisodePage = useRef(isEpisodePage);
   const [isThemeChanging, setIsThemeChanging] = useState(false);
   const [showBlobTransition, setShowBlobTransition] = useState(false);
 
-  // Handle loading complete - show SmokyLogo after a brief delay
   const handleLoadingComplete = () => {
     setIsLoading(false);
-    // Brief delay before showing the persistent logo
-    setTimeout(() => {
-      setShowSmokyLogo(true);
-    }, 100);
   };
 
   useEffect(() => {
@@ -54,7 +46,6 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
 
   return (
     <>
-      <CustomCursor />
       <WaterRipple />
 
       {/* Blob transition for theme changes */}
@@ -77,9 +68,6 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Persistent Smoky Logo - shows after loading */}
-      {showSmokyLogo && <SmokyLogo isDark={isEpisodePage} />}
 
       {/* Main content */}
       <div
