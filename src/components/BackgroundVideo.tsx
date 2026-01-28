@@ -22,7 +22,7 @@ export default function BackgroundVideo() {
         className="absolute w-full h-full object-cover"
         style={{
           filter: "grayscale(100%)",
-          opacity: 0.08,
+          opacity: 0.05,
         }}
       >
         <source src="/content/vids/background.mov" type="video/mp4" />

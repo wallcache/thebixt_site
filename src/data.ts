@@ -31,7 +31,7 @@ export const siteConfig = {
   tagline: "Rituals, Reality, and Recipes",
   whatsappLink: "https://api.whatsapp.com/send?phone=447822032838&text=I+consent+to+being+sent+messages+by+The+Bixt%27s+_Smoky_+and+will+reply+UNSUBSCRIBE+should+this+change.+%F0%9F%91%91",
   colors: {
-    cream: "#E6E2C5",
-    burgundy: "#2B4593"
+    cream: "#081E28",
+    burgundy: "#E6E2C5"
   }
 };

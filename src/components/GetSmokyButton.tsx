@@ -63,7 +63,7 @@ export default function GetSmokyButton({ variant = "light" }: GetSmokyButtonProp
       {/* Glow effect */}
       <motion.div
         className="absolute inset-0 rounded-full blur-xl -z-10"
-        style={{ backgroundColor: "#E07A5F" }}
+        style={{ backgroundColor: "#8B6914" }}
         animate={{
           opacity: isHovered ? 0.6 : 0.3,
           scale: isHovered ? 1.3 : 1,
@@ -74,7 +74,7 @@ export default function GetSmokyButton({ variant = "light" }: GetSmokyButtonProp
       {/* Inner glow */}
       <motion.div
         className="absolute inset-0 rounded-full -z-10"
-        style={{ boxShadow: "inset 0 0 20px rgba(224, 122, 95, 0.2)" }}
+        style={{ boxShadow: "inset 0 0 20px rgba(139, 105, 20, 0.2)" }}
         animate={{
           opacity: isHovered ? 1 : 0.5,
         }}

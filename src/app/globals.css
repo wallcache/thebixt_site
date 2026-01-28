@@ -3,7 +3,7 @@
 
 /* Leaflet custom styles */
 .leaflet-container {
-  background: #f5f3e7;
+  background: #081E28;
   font-family: inherit;
 }
 
@@ -18,11 +18,11 @@
 }
 
 :root {
-  --cream: #E6E2C5;
-  --burgundy: #2B4593;
+  --cream: #081E28;
+  --burgundy: #E6E2C5;
   --teal: #0d3d3a;
-  --hot-pink: #FF10F0;
-  --pink-glow: rgba(255, 16, 240, 0.3);
+  --hot-pink: #FD05A0;
+  --pink-glow: rgba(253, 5, 160, 0.3);
 }
 
 @theme inline {
@@ -44,12 +44,12 @@ body {
 
 /* Text selection highlight */
 ::selection {
-  background: #E07A5F;
+  background: #8B6914;
   color: #fff;
 }
 
 ::-moz-selection {
-  background: #E07A5F;
+  background: #8B6914;
   color: #fff;
 }
 

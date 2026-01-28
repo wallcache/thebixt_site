@@ -71,7 +71,7 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
   return (
     <div
       className="absolute inset-0 flex items-center justify-center"
-      style={{ backgroundColor: "#2B4593" }}
+      style={{ backgroundColor: "#081E28" }}
     >
       <div className="flex items-center gap-6">
         {/* Get link */}
@@ -135,7 +135,7 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
                 cy="12"
                 r="9"
                 initial={{ fill: "transparent" }}
-                animate={showText ? { fill: "#FF10F0" } : { fill: "transparent" }}
+                animate={showText ? { fill: "#FD05A0" } : { fill: "transparent" }}
                 transition={{ duration: 0.15 }}
               />
             </svg>

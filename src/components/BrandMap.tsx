@@ -29,14 +29,14 @@ const createPinkIcon = (isActive: boolean, label?: string) => {
       left: 50%;
       transform: translateX(-50%);
       margin-bottom: 8px;
-      background: #FF10F0;
+      background: #FD05A0;
       color: white;
       padding: 4px 10px;
       border-radius: 4px;
       font-size: 12px;
       font-weight: 600;
       white-space: nowrap;
-      box-shadow: 0 2px 8px rgba(255, 16, 240, 0.4);
+      box-shadow: 0 2px 8px rgba(253, 5, 160, 0.4);
     ">${label}</div>
   ` : "";
 
@@ -48,10 +48,10 @@ const createPinkIcon = (isActive: boolean, label?: string) => {
         <div style="
           width: ${size}px;
           height: ${size}px;
-          background-color: #FF10F0;
+          background-color: #FD05A0;
           border: 2px solid #fff;
           border-radius: 50%;
-          box-shadow: 0 2px 8px rgba(255, 16, 240, ${isActive ? "0.6" : "0.4"});
+          box-shadow: 0 2px 8px rgba(253, 5, 160, ${isActive ? "0.6" : "0.4"});
           transition: all 0.3s ease;
         "></div>
       </div>

@@ -383,7 +383,7 @@ export default function BrandsPage() {
                   <div
                     className="absolute inset-0 rounded-full -z-10"
                     style={{
-                      background: "radial-gradient(circle, rgba(255, 16, 240, 0.35) 0%, rgba(255, 16, 240, 0.15) 40%, transparent 70%)",
+                      background: "radial-gradient(circle, rgba(253, 5, 160, 0.35) 0%, rgba(253, 5, 160, 0.15) 40%, transparent 70%)",
                       transform: "scale(1.3)",
                       filter: "blur(40px)",
                     }}
@@ -394,7 +394,7 @@ export default function BrandsPage() {
                     style={{
                       width: "min(550px, 85vw)",
                       height: "min(550px, 85vw)",
-                      boxShadow: "0 30px 100px -20px rgba(255, 16, 240, 0.5), 0 15px 50px -10px rgba(0, 0, 0, 0.15)",
+                      boxShadow: "0 30px 100px -20px rgba(253, 5, 160, 0.5), 0 15px 50px -10px rgba(0, 0, 0, 0.15)",
                     }}
                   >
                     <BrandMap brands={featuredBrands} hoveredBrandId={activeBrandId} />

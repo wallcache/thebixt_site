@@ -8,17 +8,13 @@ interface NavLinkProps {
   href: string;
   children: string;
   isActive: boolean;
-  isDark: boolean;
 }
 
-export default function NavLink({ href, children, isActive, isDark }: NavLinkProps) {
+export default function NavLink({ href, children, isActive }: NavLinkProps) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const baseColor = isDark
-    ? isActive ? "#E6E2C5" : "rgba(230, 226, 197, 0.6)"
-    : isActive ? "#2B4593" : "rgba(43, 69, 147, 0.6)";
-
-  const hoverColor = isDark ? "#E6E2C5" : "#2B4593";
+  const baseColor = isActive ? "#E6E2C5" : "rgba(230, 226, 197, 0.6)";
+  const hoverColor = "#E6E2C5";
 
   return (
     <Link

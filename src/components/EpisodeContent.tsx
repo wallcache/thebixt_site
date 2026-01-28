@@ -51,7 +51,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
   }, [prevEpisode, router]);
 
   return (
-    <div ref={containerRef} className="min-h-screen -mt-20 pt-20" style={{ backgroundColor: "#2B4593" }}>
+    <div ref={containerRef} className="min-h-screen -mt-20 pt-20" style={{ backgroundColor: "#081E28" }}>
       {/* Header Image */}
       <div className="flex justify-center pt-8">
         <TapedPhoto

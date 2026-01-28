@@ -2,50 +2,24 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { siteConfig } from "@/data";
 import NavLink from "./NavLink";
 
-interface NavigationProps {
-  isDark?: boolean;
-  isThemeChanging?: boolean;
-}
-
-export default function Navigation({ isDark = false, isThemeChanging = false }: NavigationProps) {
+export default function Navigation() {
   const pathname = usePathname();
-  const [displayDark, setDisplayDark] = useState(isDark);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
-
-  useEffect(() => {
-    if (isThemeChanging) {
-      // Update display theme while header is hidden
-      const timer = setTimeout(() => {
-        setDisplayDark(isDark);
-      }, 250);
-      return () => clearTimeout(timer);
-    }
-  }, [isDark, isThemeChanging]);
 
   return (
     <motion.nav
       className="fixed top-0 left-0 right-0 z-[50] backdrop-blur-sm"
-      style={{ backgroundColor: displayDark ? "rgba(43, 69, 147, 0.95)" : "rgba(230, 226, 197, 0.95)" }}
-      animate={{
-        y: isThemeChanging ? -30 : 0,
-        opacity: isThemeChanging ? 0 : 1,
-      }}
-      transition={{
-        duration: 0.35,
-        ease: [0.4, 0, 0.2, 1],
-      }}
+      style={{ backgroundColor: "rgba(8, 30, 40, 0.95)" }}
     >
       <div className="max-w-6xl mx-auto px-8 md:px-12 py-6 flex items-center justify-between">
         <Link href="/" className="hover:opacity-70 transition-opacity">
           <span
-            className={`font-serif text-2xl font-semibold tracking-[0.3em] uppercase transition-colors duration-300 ${
-              displayDark ? "text-cream" : "text-burgundy"
-            }`}
+            className="font-serif text-2xl font-semibold tracking-[0.3em] uppercase transition-colors duration-300 text-cream"
           >
             Smoky
           </span>
@@ -54,21 +28,18 @@ export default function Navigation({ isDark = false, isThemeChanging = false }: 
           <NavLink
             href="/episodes"
             isActive={pathname === "/episodes"}
-            isDark={displayDark}
           >
             Past Episodes
           </NavLink>
           <NavLink
             href="/brands"
             isActive={pathname === "/brands"}
-            isDark={displayDark}
           >
             Brands
           </NavLink>
           <NavLink
             href="/about"
             isActive={pathname === "/about"}
-            isDark={displayDark}
           >
             About
           </NavLink>
@@ -76,10 +47,7 @@ export default function Navigation({ isDark = false, isThemeChanging = false }: 
             href={siteConfig.whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className={`
-              relative text-sm tracking-wide px-4 py-2 rounded-full border overflow-hidden
-              ${displayDark ? "border-cream/40" : "border-burgundy/40"}
-            `}
+            className="relative text-sm tracking-wide px-4 py-2 rounded-full border overflow-hidden border-cream/40"
             onMouseEnter={() => setIsButtonHovered(true)}
             onMouseLeave={() => setIsButtonHovered(false)}
             whileHover={{ scale: 1.05 }}
@@ -87,7 +55,7 @@ export default function Navigation({ isDark = false, isThemeChanging = false }: 
           >
             {/* Pop-out background animation */}
             <motion.span
-              className={`absolute inset-0 ${displayDark ? "bg-cream" : "bg-burgundy"}`}
+              className="absolute inset-0 bg-cream"
               initial={{ scale: 0, borderRadius: "100%" }}
               animate={{
                 scale: isButtonHovered ? 1.5 : 0,
@@ -102,9 +70,7 @@ export default function Navigation({ isDark = false, isThemeChanging = false }: 
             <motion.span
               className="relative z-10"
               animate={{
-                color: isButtonHovered
-                  ? (displayDark ? "#2B4593" : "#E6E2C5")
-                  : (displayDark ? "#E6E2C5" : "#2B4593"),
+                color: isButtonHovered ? "#081E28" : "#E6E2C5",
               }}
               transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
             >

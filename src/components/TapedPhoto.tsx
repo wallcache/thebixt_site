@@ -56,7 +56,7 @@ export default function TapedPhoto({ src, alt, caption, rotation = 0, isDark = f
               className={`${config.tapeText} uppercase`}
               style={{
                 fontFamily: "var(--font-marker), cursive",
-                color: "#2B4593",
+                color: "#081E28",
                 letterSpacing: "0.01em",
               }}
             >
@@ -95,7 +95,7 @@ export default function TapedPhoto({ src, alt, caption, rotation = 0, isDark = f
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={() => setIsExpanded(false)}
-            style={{ backgroundColor: "rgba(43, 69, 147, 0.2)" }}
+            style={{ backgroundColor: "rgba(8, 30, 40, 0.7)" }}
           >
             <motion.div
               className="relative"
@@ -119,7 +119,7 @@ export default function TapedPhoto({ src, alt, caption, rotation = 0, isDark = f
                     className="text-base uppercase"
                     style={{
                       fontFamily: "var(--font-marker), cursive",
-                      color: "#2B4593",
+                      color: "#081E28",
                       letterSpacing: "0.01em",
                     }}
                   >

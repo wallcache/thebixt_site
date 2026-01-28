@@ -9,7 +9,7 @@ interface BlobTransitionProps {
 }
 
 export default function BlobTransition({ show, onComplete, isDark }: BlobTransitionProps) {
-  const targetColor = isDark ? "#2B4593" : "#E6E2C5";
+  const targetColor = "#081E28";
 
   return (
     <AnimatePresence>
