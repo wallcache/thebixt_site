@@ -113,6 +113,17 @@ body {
   border-color: var(--hot-pink);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+.text-gradient-pink {
+  background: linear-gradient(135deg, #FD05A0, #E6E2C5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 @keyframes loadingBar {
   0% {
     width: 0%;

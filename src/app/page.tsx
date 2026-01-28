@@ -1,8 +1,9 @@
-import { getLatestEpisode } from "@/lib/episodes";
+import { getLatestEpisode, getAllEpisodes } from "@/lib/episodes";
 import HomeContent from "@/components/HomeContent";
 
 export default function Home() {
   const latestEpisode = getLatestEpisode();
+  const recentEpisodes = getAllEpisodes().slice(0, 5);
 
   if (!latestEpisode) {
     return (
@@ -12,5 +13,5 @@ export default function Home() {
     );
   }
 
-  return <HomeContent latestEpisode={latestEpisode} />;
+  return <HomeContent latestEpisode={latestEpisode} recentEpisodes={recentEpisodes} />;
 }
