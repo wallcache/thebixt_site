@@ -7,7 +7,7 @@ interface LoadingScreenProps {
   onLoadingComplete: () => void;
 }
 
-const LETTERS = ["S", "m", "o", "k", "y"];
+const LETTERS = ["S", "M", "O", "K", "Y"];
 const STAGGER_DELAY = 0.12;
 const LETTER_DURATION = 0.4;
 // Total time for all letters + period to appear

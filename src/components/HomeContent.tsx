@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import BackgroundVideo from "@/components/BackgroundVideo";
 import TapedPhoto from "@/components/TapedPhoto";
@@ -54,6 +54,35 @@ const fadeUpSlow = {
 
 export default function HomeContent({ latestEpisode, recentEpisodes }: HomeContentProps) {
   const heroRef = useRef<HTMLDivElement>(null);
+  const oRef = useRef<HTMLSpanElement>(null);
+  const textBoxRef = useRef<HTMLDivElement>(null);
+
+  // Measured position of the O's center — used for transform-origin and clip-path
+  const [originPct, setOriginPct] = useState("50% 50%");
+  const clipCenterRef = useRef("50% 50%");
+
+  useEffect(() => {
+    const measure = () => {
+      const oEl = oRef.current;
+      const boxEl = textBoxRef.current;
+      if (!oEl || !boxEl) return;
+
+      const oRect = oEl.getBoundingClientRect();
+      const boxRect = boxEl.getBoundingClientRect();
+
+      // Transform-origin: O center relative to the text box
+      const ox = ((oRect.left + oRect.width / 2 - boxRect.left) / boxRect.width) * 100;
+      const oy = ((oRect.top + oRect.height / 2 - boxRect.top) / boxRect.height) * 100;
+      setOriginPct(`${ox.toFixed(1)}% ${oy.toFixed(1)}%`);
+
+      // Clip-path center: O center relative to viewport
+      const vx = ((oRect.left + oRect.width / 2) / window.innerWidth) * 100;
+      const vy = ((oRect.top + oRect.height / 2) / window.innerHeight) * 100;
+      clipCenterRef.current = `${vx.toFixed(1)}% ${vy.toFixed(1)}%`;
+    };
+
+    document.fonts.ready.then(measure);
+  }, []);
 
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
@@ -66,7 +95,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
   const textOpacity = useTransform(heroProgress, [0.3, 0.6], [1, 0]);
   // Circular clip-path expands to reveal portal content through the O
   const circleRadius = useTransform(heroProgress, [0.05, 0.65], [0, 110]);
-  const clipPath = useTransform(circleRadius, (r) => `circle(${r}% at 50% 50%)`);
+  const clipPath = useTransform(circleRadius, (r) => `circle(${r}% at ${clipCenterRef.current})`);
   // Portal content fades in as circle grows
   const portalOpacity = useTransform(heroProgress, [0.1, 0.4], [0, 1]);
 
@@ -104,16 +133,15 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
           {/* Text layer (in front) — scales up through the O */}
           <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
             <motion.div
+              ref={textBoxRef}
               style={{
                 scale: heroScale,
                 opacity: textOpacity,
-                // Origin at center of the O counter-space
-                // O is ~52% across "Smoky.", ~43% from top (above center due to descenders)
-                transformOrigin: "52% 43%",
+                transformOrigin: originPct,
               }}
             >
               <h1 className="font-serif text-7xl md:text-9xl text-burgundy tracking-tight whitespace-nowrap">
-                Smoky<span className="text-hot-pink">.</span>
+                SM<span ref={oRef}>O</span>KY<span className="text-hot-pink">.</span>
               </h1>
             </motion.div>
           </div>
