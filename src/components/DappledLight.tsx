@@ -80,7 +80,7 @@ const fragmentShader = `
     // Mouse proximity — controls rain density/brightness
     vec2 mouseNorm = uMouse * aspect;
     float mouseDist = length(mouseNorm - uvAspect);
-    float mouseProximity = smoothstep(1.0, 0.0, mouseDist) * uMouseInfluence;
+    float mouseProximity = smoothstep(0.5, 0.0, mouseDist) * uMouseInfluence;
 
     float t = uTime;
 
@@ -90,15 +90,15 @@ const fragmentShader = `
     float r3 = rippleLayer(uvAspect + 7.3, t, 12.0, 0.7);
 
     // Combine — larger scale (r1) is bolder, smaller scales are subtler
-    float ripples = r1 * 0.6 + r2 * 0.45 + r3 * 0.3;
+    float ripples = r1 * 0.5 + r2 * 0.35 + r3 * 0.25;
 
     // Apply mouse proximity — more rain near cursor
-    float intensity = ripples * (0.15 + mouseProximity * 1.2);
+    float intensity = ripples * (0.05 + mouseProximity * 0.9);
 
-    // Wet pavement highlight colour — brighter cool blue-white
-    vec3 color = vec3(0.7, 0.82, 0.95);
+    // Wet pavement highlight colour — cool blue-white
+    vec3 color = vec3(0.65, 0.78, 0.92);
 
-    float alpha = clamp(intensity * 1.2, 0.0, 1.0);
+    float alpha = clamp(intensity * 0.9, 0.0, 1.0);
     gl_FragColor = vec4(color * alpha, alpha);
   }
 `;
