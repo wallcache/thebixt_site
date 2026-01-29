@@ -7,6 +7,7 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import BackgroundVideo from "@/components/BackgroundVideo";
 import DappledLight from "@/components/DappledLight";
+import SmokyLight from "@/components/SmokyLight";
 
 import GetSmokyButton from "@/components/GetSmokyButton";
 import { Episode } from "@/lib/episodes";
@@ -304,13 +305,15 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
   const clipPath = useTransform(circleRadius, (r) => `circle(${r}% at ${clipCenterRef.current})`);
   // Portal content fades in as circle grows
   const portalOpacity = useTransform(heroProgress, [0.1, 0.4], [0, 1]);
-  // Dappled light fades out as scroll begins
-  const dappledScrollOpacity = useTransform(heroProgress, [0, 0.15], [1, 0]);
+  // Smoky light fades out as scroll begins
+  const smokyScrollOpacity = useTransform(heroProgress, [0, 0.15], [1, 0]);
+  // Rain fades in after portal zoom-through
+  const rainOpacity = useTransform(heroProgress, [0.55, 0.75], [0, 1]);
 
-  // Delay dappled light fade-in until after loading screen (~2.2s)
-  const [dappledVisible, setDappledVisible] = useState(false);
+  // Delay smoky light fade-in until after loading screen (~2.2s)
+  const [smokyVisible, setSmokyVisible] = useState(false);
   useEffect(() => {
-    const timer = setTimeout(() => setDappledVisible(true), 2200);
+    const timer = setTimeout(() => setSmokyVisible(true), 2200);
     return () => clearTimeout(timer);
   }, []);
 
@@ -329,15 +332,15 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
           className="sticky top-0 h-screen overflow-hidden"
           style={{ backgroundColor: "#081E28" }}
         >
-          {/* Dappled light layer — fades in after loading, fades out on scroll */}
+          {/* Smoky light layer — fades in after loading, fades out on scroll */}
           <motion.div
             className="absolute inset-0 z-[5]"
             initial={{ opacity: 0 }}
-            animate={{ opacity: dappledVisible ? 1 : 0 }}
+            animate={{ opacity: smokyVisible ? 1 : 0 }}
             transition={{ duration: 1.5, ease: [0.4, 0, 0.2, 1] }}
           >
-            <motion.div className="w-full h-full" style={{ opacity: dappledScrollOpacity }}>
-              <DappledLight speed={0.8} mouseInfluence={1.2} />
+            <motion.div className="w-full h-full" style={{ opacity: smokyScrollOpacity }}>
+              <SmokyLight speed={0.6} mouseInfluence={1.0} />
             </motion.div>
           </motion.div>
 
@@ -377,9 +380,9 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
           <motion.div
             className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
             initial={{ opacity: 0 }}
-            animate={{ opacity: dappledVisible ? 1 : 0 }}
+            animate={{ opacity: smokyVisible ? 1 : 0 }}
             transition={{ duration: 1, delay: 0.5 }}
-            style={{ opacity: dappledScrollOpacity }}
+            style={{ opacity: smokyScrollOpacity }}
           >
             <motion.svg
               width="28"
@@ -401,6 +404,14 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
           </motion.div>
         </div>
       </div>
+
+      {/* Rain layer — fades in after portal zoom-through, stays for remaining sections */}
+      <motion.div
+        className="fixed inset-0 z-[1] pointer-events-none"
+        style={{ opacity: rainOpacity }}
+      >
+        <DappledLight speed={0.8} mouseInfluence={1.2} />
+      </motion.div>
 
       {/* Section 3 — Latest Episode Feature (Liquid Glass Card) */}
       <section className="py-24 md:py-32 px-6 relative z-10">

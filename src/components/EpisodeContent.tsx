@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Episode } from "@/lib/episodes";
 import TypewriterText from "./TypewriterText";
 import EpisodeSensesGrid from "./EpisodeSensesGrid";
+import DappledLight from "./DappledLight";
 
 interface EpisodeContentProps {
   episode: Episode;
@@ -50,7 +51,11 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
   }, [prevEpisode, router]);
 
   return (
-    <div ref={containerRef} className="min-h-screen -mt-20 pt-20">
+    <div className="relative">
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <DappledLight speed={0.8} mouseInfluence={1.2} />
+      </div>
+      <div ref={containerRef} className="relative z-10 min-h-screen -mt-20 pt-20">
       <div className="max-w-2xl mx-auto px-6 py-12">
         <motion.div
           initial={{ opacity: 0, x: -10 }}
@@ -251,6 +256,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
           </div>
         </motion.footer>
 
+      </div>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import TypewriterText from "@/components/TypewriterText";
+import DappledLight from "@/components/DappledLight";
 
 // Dynamically import map to avoid SSR issues with Leaflet
 const BrandMap = dynamic(() => import("@/components/BrandMap"), {
@@ -301,7 +302,11 @@ export default function BrandsPage() {
   }, [activeBrandId]);
 
   return (
-    <div className="min-h-screen bg-cream" onClick={handlePageClick}>
+    <div className="relative min-h-screen" onClick={handlePageClick}>
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <DappledLight speed={0.8} mouseInfluence={1.2} />
+      </div>
+      <div className="relative z-10">
       {/* Header */}
       <section className="px-6 md:px-12 pt-12 pb-8 max-w-7xl mx-auto">
         <div className="text-center mb-8">
@@ -405,6 +410,7 @@ export default function BrandsPage() {
           </div>
         </div>
       </section>
+      </div>
     </div>
   );
 }

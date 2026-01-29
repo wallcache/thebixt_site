@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import TypewriterText from "@/components/TypewriterText";
+import DappledLight from "@/components/DappledLight";
 import { Episode } from "@/lib/episodes";
 
 interface EpisodesContentProps {
@@ -10,7 +11,11 @@ interface EpisodesContentProps {
 
 export default function EpisodesContent({ episodes }: EpisodesContentProps) {
   return (
-    <div className="max-w-6xl mx-auto px-6 md:px-12 py-12">
+    <div className="relative">
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <DappledLight speed={0.8} mouseInfluence={1.2} />
+      </div>
+      <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12 py-12">
       <header className="mb-16">
         <h1 className="font-serif text-4xl md:text-5xl text-burgundy mb-4">
           <TypewriterText text="Episodes" wordByWord />
@@ -35,6 +40,7 @@ export default function EpisodesContent({ episodes }: EpisodesContentProps) {
           ))}
         </div>
       </section>
+      </div>
     </div>
   );
 }
