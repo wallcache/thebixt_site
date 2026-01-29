@@ -66,63 +66,79 @@ const fragmentShader = `
     vec2 mouse = vec2((uMouse.x - 0.5) * ar, uMouse.y - 0.5);
 
     // --- Domain warping (Inigo Quilez style) ---
-    // Each warp layer feeds into the next, creating organic folding motion.
-    // Mouse displaces the domain — moving the mouse stirs and rotates the smoke.
+    // Gentle mouse influence — small displacement, no sudden jumps
 
     // Base coordinates — large scale, slow drift
     vec2 q = p * 1.2;
-    q += mouse * uMouseInfluence * 0.4;                    // mouse shifts the whole field
-    q += vec2(t * 0.03, t * 0.02);                         // slow drift
+    q += mouse * uMouseInfluence * 0.15;
+    q += vec2(t * 0.03, t * 0.02);
 
     // First warp — large shapes
     float n1 = fbm(q);
     vec2 warp1 = vec2(n1, fbm(q + vec2(5.2, 1.3)));
 
-    // Mouse rotation — cursor angle rotates the warp field
+    // Gentle mouse rotation of warp field
     float mouseAngle = atan(mouse.y, mouse.x + 0.001);
-    float mouseDist = length(mouse);
-    warp1 = rot(mouseAngle * 0.3 * uMouseInfluence) * warp1;
+    warp1 = rot(mouseAngle * 0.15 * uMouseInfluence) * warp1;
 
-    // Second warp — feeds first warp output back in, creating folding
+    // Second warp — folding
     vec2 r = q + warp1 * 1.6 + vec2(t * 0.04, -t * 0.03);
-    r += mouse * uMouseInfluence * 0.25;                   // mouse stirs deeper layer too
+    r += mouse * uMouseInfluence * 0.08;
     float n2 = fbm(r);
     vec2 warp2 = vec2(n2, fbm(r + vec2(8.3, 2.8)));
 
-    // Third warp — even more folding
+    // Third warp — deep folding
     vec2 s = q + warp2 * 1.4 + vec2(-t * 0.02, t * 0.05);
     float n3 = fbm(s);
 
-    // --- Combine into smoke/light pattern ---
-
-    // Folded smoke density — the triple domain-warp creates organic turbulence
+    // --- Smoke pattern ---
     float smoke = n3;
-
-    // Light through gaps — bright where smoke is thin
     float lightThrough = smoothstep(0.55, 0.3, smoke);
-
-    // Darker thick regions
     float shadow = smoothstep(0.3, 0.6, smoke) * 0.4;
 
-    // Edge glow where light meets shadow (like light catching smoke edges)
-    float edgeGlow = smoothstep(0.0, 0.08, abs(smoke - 0.42)) ;
-    edgeGlow = 1.0 - edgeGlow;
+    // Edge glow where light meets shadow
+    float edgeGlow = 1.0 - smoothstep(0.0, 0.08, abs(smoke - 0.42));
     edgeGlow *= 0.3;
 
-    // Mouse proximity — subtle brightening near cursor
-    float pMouseDist = length(p - mouse);
-    float mouseGlow = smoothstep(0.5, 0.0, pMouseDist) * uMouseInfluence * 0.12;
+    // --- Light streaks ---
+    // Angled shafts of light filtering through, using a separate noise field
+    // that stretches vertically (like light coming from above through gaps)
+    vec2 streakUV = p;
+    streakUV += mouse * uMouseInfluence * 0.1;
+    // Stretch Y to make vertical streaks
+    streakUV.y *= 0.3;
+    streakUV.x *= 1.5;
+    // Slow rotation so streaks drift angle over time
+    streakUV = rot(t * 0.015 + mouseAngle * 0.1) * streakUV;
+    streakUV += vec2(t * 0.02, t * 0.01);
 
-    // Final intensity — dim and smoky
+    float streakNoise = fbm(streakUV * 1.8);
+    // Sharp bright bands where noise crosses threshold
+    float streaks = smoothstep(0.48, 0.52, streakNoise) * smoothstep(0.62, 0.52, streakNoise);
+    // Broader soft streaks underneath
+    float softStreaks = smoothstep(0.35, 0.5, streakNoise) * smoothstep(0.7, 0.5, streakNoise);
+
+    // Streaks only visible in lighter smoke regions (light coming through gaps)
+    float streakMask = smoothstep(0.5, 0.35, smoke);
+    streaks *= streakMask;
+    softStreaks *= streakMask;
+
+    // Mouse proximity glow
+    float pMouseDist = length(p - mouse);
+    float mouseGlow = smoothstep(0.5, 0.0, pMouseDist) * uMouseInfluence * 0.1;
+
+    // Final intensity — dim and smoky + streaks
     float intensity = lightThrough * 0.22 + edgeGlow + mouseGlow;
+    intensity += streaks * 0.18 + softStreaks * 0.06;
     intensity -= shadow * 0.15;
     intensity = clamp(intensity, 0.0, 1.0);
 
-    // Warm cream/amber palette
+    // Warm cream/amber palette — streaks are warmer
     vec3 warmLight = vec3(0.95, 0.88, 0.65);
     vec3 coolHaze = vec3(0.55, 0.6, 0.65);
-    // Mix based on how much "light" vs "shadow" at this pixel
+    vec3 streakColor = vec3(1.0, 0.92, 0.72);
     vec3 color = mix(coolHaze, warmLight, lightThrough);
+    color = mix(color, streakColor, (streaks + softStreaks * 0.3) * streakMask);
 
     float alpha = intensity * 0.7;
     gl_FragColor = vec4(color * alpha, alpha);
@@ -200,9 +216,9 @@ export default function SmokyLight({
     const animate = () => {
       const elapsed = (performance.now() - startTime) / 1000;
 
-      // Smooth mouse interpolation
-      mouseRef.current.x += (targetMouseRef.current.x - mouseRef.current.x) * 0.06;
-      mouseRef.current.y += (targetMouseRef.current.y - mouseRef.current.y) * 0.06;
+      // Heavy mouse smoothing — prevents jumpy domain warping
+      mouseRef.current.x += (targetMouseRef.current.x - mouseRef.current.x) * 0.015;
+      mouseRef.current.y += (targetMouseRef.current.y - mouseRef.current.y) * 0.015;
 
       material.uniforms.uTime.value = elapsed * speed;
       material.uniforms.uMouse.value.set(mouseRef.current.x, mouseRef.current.y);
