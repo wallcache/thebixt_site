@@ -69,7 +69,7 @@ const fragmentShader = `
 
     // Base coordinates — large scale, slow drift
     vec2 q = p * 1.2;
-    q += mouse * uMouseInfluence * 0.35;
+    q += mouse * uMouseInfluence * 0.6;
     q += vec2(t * 0.03, t * 0.02);
 
     // First warp — large shapes
@@ -78,11 +78,11 @@ const fragmentShader = `
 
     // Mouse rotation of warp field
     float mouseAngle = atan(mouse.y, mouse.x + 0.001);
-    warp1 = rot(mouseAngle * 0.3 * uMouseInfluence) * warp1;
+    warp1 = rot(mouseAngle * 0.5 * uMouseInfluence) * warp1;
 
     // Second warp — folding
     vec2 r = q + warp1 * 1.6 + vec2(t * 0.04, -t * 0.03);
-    r += mouse * uMouseInfluence * 0.2;
+    r += mouse * uMouseInfluence * 0.35;
     float n2 = fbm(r);
     vec2 warp2 = vec2(n2, fbm(r + vec2(8.3, 2.8)));
 
@@ -128,14 +128,9 @@ const fragmentShader = `
     streaks *= streakMask;
     softStreaks *= streakMask;
 
-    // Mouse proximity glow
-    float pMouseDist = length(p - mouse);
-    float mouseGlow = smoothstep(0.5, 0.0, pMouseDist) * uMouseInfluence * 0.15;
-
     // Final intensity — radial light + smoke + streaks
     float intensity = lightThrough * 0.22 * (0.4 + radialFalloff * 0.6);
     intensity += edgeGlow * (0.5 + radialFalloff * 0.5);
-    intensity += mouseGlow;
     intensity += streaks * 0.4 + softStreaks * 0.15;
     intensity -= shadow * 0.12;
     intensity = clamp(intensity, 0.0, 1.0);
@@ -223,9 +218,9 @@ export default function SmokyLight({
     const animate = () => {
       const elapsed = (performance.now() - startTime) / 1000;
 
-      // Smooth mouse interpolation — steady but responsive
-      mouseRef.current.x += (targetMouseRef.current.x - mouseRef.current.x) * 0.035;
-      mouseRef.current.y += (targetMouseRef.current.y - mouseRef.current.y) * 0.035;
+      // Mouse interpolation — fast and responsive
+      mouseRef.current.x += (targetMouseRef.current.x - mouseRef.current.x) * 0.07;
+      mouseRef.current.y += (targetMouseRef.current.y - mouseRef.current.y) * 0.07;
 
       material.uniforms.uTime.value = elapsed * speed;
       material.uniforms.uMouse.value.set(mouseRef.current.x, mouseRef.current.y);
