@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import BackgroundVideo from "@/components/BackgroundVideo";
 import DappledLight from "@/components/DappledLight";
@@ -52,6 +52,115 @@ const fadeUpSlow = {
     transition: { duration: 0.8, ease },
   },
 };
+
+function LatestEpisodeCard({ episode }: { episode: Episode }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = e.clientX - cx;
+    const dy = e.clientY - cy;
+
+    // Tilt: map cursor offset to rotation (max ~12deg)
+    setTilt({
+      x: -(dy / rect.height) * 12,
+      y: (dx / rect.width) * 12,
+    });
+
+    // Magnetic: slight follow toward cursor
+    setOffset({
+      x: dx * 0.08,
+      y: dy * 0.08,
+    });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setTilt({ x: 0, y: 0 });
+    setOffset({ x: 0, y: 0 });
+    setIsHovered(false);
+  }, []);
+
+  return (
+    <motion.div
+      className="max-w-2xl mx-auto"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, ease }}
+    >
+      <div style={{ perspective: 800 }}>
+        <motion.div
+          ref={cardRef}
+          className="relative rounded-3xl overflow-hidden p-10 md:p-14 text-center cursor-pointer"
+          style={{
+            background: "linear-gradient(135deg, rgba(230,226,197,0.08) 0%, rgba(230,226,197,0.03) 100%)",
+            border: "1px solid rgba(230,226,197,0.12)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(230,226,197,0.1)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+          }}
+          animate={{
+            rotateX: tilt.x,
+            rotateY: tilt.y,
+            x: offset.x,
+            y: offset.y,
+            boxShadow: isHovered
+              ? "0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(230,226,197,0.15)"
+              : "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(230,226,197,0.1)",
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 200,
+            damping: 20,
+            mass: 0.5,
+          }}
+          onMouseMove={handleMouseMove}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={handleMouseLeave}
+        >
+          {/* Glass highlight streak */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none rounded-3xl"
+            style={{
+              background: "linear-gradient(105deg, transparent 40%, rgba(230,226,197,0.06) 45%, rgba(230,226,197,0.1) 50%, rgba(230,226,197,0.06) 55%, transparent 60%)",
+            }}
+            animate={{
+              opacity: isHovered ? 1 : 0,
+            }}
+            transition={{ duration: 0.4 }}
+          />
+
+          <div className="w-12 h-px bg-hot-pink mb-6 mx-auto" />
+          <p className="text-burgundy/40 text-xs uppercase tracking-[0.2em] mb-4">
+            {episode.date}
+          </p>
+          <h2 className="font-serif text-3xl md:text-5xl text-burgundy mb-3">
+            {episode.title}
+          </h2>
+          <p className="text-burgundy/60 text-lg mb-6">
+            {episode.subtitle}
+          </p>
+          <p className="text-burgundy/50 text-base leading-relaxed mb-8">
+            {episode.excerpt}
+          </p>
+          <Link
+            href={`/episode/${episode.slug}`}
+            className="inline-block border border-burgundy/30 text-burgundy px-8 py-3 text-sm tracking-wider uppercase hover:bg-burgundy hover:text-cream transition-all duration-300"
+          >
+            Read Episode &rarr;
+          </Link>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function HomeContent({ latestEpisode, recentEpisodes }: HomeContentProps) {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -204,35 +313,9 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
         </div>
       </div>
 
-      {/* Section 3 — Latest Episode Feature */}
+      {/* Section 3 — Latest Episode Feature (Liquid Glass Card) */}
       <section className="py-24 md:py-32 px-6 relative z-10">
-        <motion.div
-          className="max-w-2xl mx-auto text-center"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease }}
-        >
-          <div className="w-12 h-px bg-hot-pink mb-6 mx-auto" />
-          <p className="text-burgundy/40 text-xs uppercase tracking-[0.2em] mb-4">
-            {latestEpisode.date}
-          </p>
-          <h2 className="font-serif text-3xl md:text-5xl text-burgundy mb-3">
-            {latestEpisode.title}
-          </h2>
-          <p className="text-burgundy/60 text-lg mb-6">
-            {latestEpisode.subtitle}
-          </p>
-          <p className="text-burgundy/50 text-base leading-relaxed mb-8">
-            {latestEpisode.excerpt}
-          </p>
-          <Link
-            href={`/episode/${latestEpisode.slug}`}
-            className="inline-block border border-burgundy/30 text-burgundy px-8 py-3 text-sm tracking-wider uppercase hover:bg-burgundy hover:text-cream transition-all duration-300"
-          >
-            Read Episode &rarr;
-          </Link>
-        </motion.div>
+        <LatestEpisodeCard episode={latestEpisode} />
       </section>
 
       {/* Section 4 — Recent Episodes Grid */}
