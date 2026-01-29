@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import { siteConfig } from "@/data";
 import NavLink from "./NavLink";
@@ -16,8 +16,26 @@ export default function Navigation({ visible = true }: NavigationProps) {
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [navOffset, setNavOffset] = useState({ x: 0, y: 0 });
+  const navRef = useRef<HTMLElement>(null);
   const { scrollY } = useScroll();
   const lastScrollY = useRef(0);
+
+  const handleNavMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const rect = nav.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    setNavOffset({
+      x: (e.clientX - cx) * 0.04,
+      y: (e.clientY - cy) * 0.15,
+    });
+  }, []);
+
+  const handleNavMouseLeave = useCallback(() => {
+    setNavOffset({ x: 0, y: 0 });
+  }, []);
 
   // Close menu on route change
   useEffect(() => {
@@ -47,14 +65,24 @@ export default function Navigation({ visible = true }: NavigationProps) {
       {/* Top bar */}
       <div className="fixed top-5 left-0 right-0 z-[50] flex justify-center pointer-events-none">
         <motion.nav
+          ref={navRef}
           className="w-[calc(100%-3rem)] max-w-3xl backdrop-blur-md rounded-2xl shadow-sm pointer-events-auto"
           style={{ backgroundColor: "rgba(230, 226, 197, 0.88)" }}
           initial={{ y: "-120%", opacity: 0 }}
           animate={{
             y: shouldHide && !menuOpen ? "-120%" : "0%",
             opacity: shouldHide && !menuOpen ? 0 : 1,
+            x: navOffset.x,
+            translateY: navOffset.y,
           }}
-          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+          transition={{
+            y: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
+            opacity: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
+            x: { type: "spring", stiffness: 150, damping: 15, mass: 0.2 },
+            translateY: { type: "spring", stiffness: 150, damping: 15, mass: 0.2 },
+          }}
+          onMouseMove={handleNavMouseMove}
+          onMouseLeave={handleNavMouseLeave}
         >
           <div className="px-6 md:px-10 py-4 flex items-center justify-between">
             <Link href="/" className="hover:opacity-70 transition-opacity">
