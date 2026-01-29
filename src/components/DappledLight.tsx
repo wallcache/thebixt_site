@@ -90,15 +90,15 @@ const fragmentShader = `
     float r3 = rippleLayer(uvAspect + 7.3, t, 12.0, 0.7);
 
     // Combine — larger scale (r1) is bolder, smaller scales are subtler
-    float ripples = r1 * 0.5 + r2 * 0.35 + r3 * 0.2;
+    float ripples = r1 * 0.6 + r2 * 0.45 + r3 * 0.3;
 
     // Apply mouse proximity — more rain near cursor
-    float intensity = ripples * (0.08 + mouseProximity * 0.9);
+    float intensity = ripples * (0.15 + mouseProximity * 1.2);
 
-    // Wet pavement highlight colour — cool blue-grey
-    vec3 color = vec3(0.55, 0.7, 0.85);
+    // Wet pavement highlight colour — brighter cool blue-white
+    vec3 color = vec3(0.7, 0.82, 0.95);
 
-    float alpha = clamp(intensity * 0.6, 0.0, 1.0);
+    float alpha = clamp(intensity * 1.2, 0.0, 1.0);
     gl_FragColor = vec4(color * alpha, alpha);
   }
 `;
