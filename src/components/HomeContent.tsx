@@ -129,12 +129,17 @@ function LatestEpisodeCard({ episode }: { episode: Episode }) {
 
   return (
     <motion.div
-      className="max-w-4xl mx-auto"
+      className="max-w-4xl mx-auto relative"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
       variants={cardStagger}
     >
+      {/* Pink background glow */}
+      <div
+        className="absolute -inset-8 rounded-[3rem] blur-3xl opacity-20 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse at center, #FD05A0, transparent 70%)" }}
+      />
       <div style={{ perspective: 900 }}>
         <motion.div
           ref={cardRef}

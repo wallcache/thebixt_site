@@ -69,7 +69,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
         <article>
           <header className="mb-12">
             <motion.p
-              className="text-sm text-burgundy/50 mb-4"
+              className="text-sm text-hot-pink mb-4"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -77,7 +77,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
             >
               {episode.date}
             </motion.p>
-            <h1 className="font-serif text-3xl md:text-4xl text-hot-pink mb-4">
+            <h1 className="font-serif text-3xl md:text-4xl text-burgundy mb-4">
               <TypewriterText text={episode.title} wordByWord />
             </h1>
             <p className="text-burgundy/70 text-lg">
