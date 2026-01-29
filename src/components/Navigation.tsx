@@ -109,30 +109,19 @@ export default function Navigation({ visible = true }: NavigationProps) {
                 href={siteConfig.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative text-sm tracking-wide px-4 py-2 rounded-full border overflow-hidden"
-                style={{ borderColor: "rgba(8, 30, 40, 0.3)" }}
+                className="text-sm tracking-wide px-4 py-2 rounded-full border"
+                animate={{
+                  backgroundColor: isButtonHovered ? "#081E28" : "transparent",
+                  borderColor: isButtonHovered ? "#FD05A0" : "rgba(8, 30, 40, 0.3)",
+                  color: isButtonHovered ? "#E6E2C5" : "#081E28",
+                }}
+                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                 onMouseEnter={() => setIsButtonHovered(true)}
                 onMouseLeave={() => setIsButtonHovered(false)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <motion.span
-                  className="absolute inset-0"
-                  style={{ backgroundColor: "#FD05A0" }}
-                  initial={{ scale: 0, borderRadius: "100%" }}
-                  animate={{
-                    scale: isButtonHovered ? 1.5 : 0,
-                    borderRadius: isButtonHovered ? "0%" : "100%",
-                  }}
-                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                />
-                <motion.span
-                  className="relative z-10"
-                  animate={{ color: isButtonHovered ? "#081E28" : "#081E28" }}
-                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                >
-                  Get Smoky
-                </motion.span>
+                Get Smoky
               </motion.a>
             </div>
 
