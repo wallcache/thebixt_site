@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import TypewriterText from "@/components/TypewriterText";
 import DappledLight from "@/components/DappledLight";
@@ -8,45 +9,44 @@ const characters = [
   {
     name: "Archie",
     initials: "A",
-    color: "#3B5998",
+    image: "/characters/archie.png",
     blurb: "One of the boys. Currently off the market — dating G, and somehow keeping it together.",
   },
   {
     name: "G",
     initials: "G",
-    color: "#FD05A0",
+    image: "/characters/g.png",
     blurb: "Archie's girlfriend, Birdie's best friend, and the glue holding everyone's social calendar together.",
   },
   {
     name: "Baz",
     initials: "B",
-    color: "#0d3d3a",
+    image: "/characters/baz.png",
     blurb: "Racing enthusiast, one of the boys, and the one most likely to disappear to Silverstone on a Tuesday.",
   },
   {
     name: "Max",
     initials: "M",
-    color: "#8B6914",
+    image: "/characters/max.png",
     blurb: "One of the boys. Single, mingling, and treating London like his personal dating app.",
   },
   {
     name: "Teddy",
     initials: "T",
-    color: "#5C3D2E",
+    image: "/characters/teddy.png",
     blurb: "One of the boys. The quiet operator — says little, notices everything.",
   },
   {
     name: "Flick",
     fullName: "Felicity Bhat",
     initials: "F",
-    color: "#7B2D8E",
+    image: "/characters/flick.png",
     blurb: "Tech entrepreneur, best friends with G, and the one who always has a plan B (and C, and D).",
   },
   {
     name: "Birdie",
     fullName: "Beatrice Aelfric",
     initials: "B",
-    color: "#C4456D",
     blurb: "G's best friend, has history with Baz, and the kind of person who makes every room more interesting.",
   },
 ];
@@ -86,14 +86,23 @@ export default function SilverSpoonersContent() {
                   ease: [0.25, 0.1, 0.25, 1],
                 }}
               >
-                {/* Placeholder image — coloured block with initials */}
-                <div
-                  className="w-full aspect-[4/3] flex items-center justify-center"
-                  style={{ backgroundColor: char.color }}
-                >
-                  <span className="font-serif text-5xl font-semibold text-white/80 select-none">
-                    {char.initials}
-                  </span>
+                {/* Character image */}
+                <div className="w-full aspect-[4/3] relative overflow-hidden bg-[#1E0A32]">
+                  {char.image ? (
+                    <Image
+                      src={char.image}
+                      alt={char.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-[#1E0A32]">
+                      <span className="font-serif text-5xl font-semibold text-hot-pink/60 select-none">
+                        {char.initials}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-5">
