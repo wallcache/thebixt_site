@@ -58,6 +58,7 @@ function LatestEpisodeCard({ episode }: { episode: Episode }) {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const [lightPos, setLightPos] = useState({ x: 50, y: 50 });
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const card = cardRef.current;
@@ -68,16 +69,20 @@ function LatestEpisodeCard({ episode }: { episode: Episode }) {
     const dx = e.clientX - cx;
     const dy = e.clientY - cy;
 
-    // Tilt: map cursor offset to rotation (max ~12deg)
     setTilt({
-      x: -(dy / rect.height) * 12,
-      y: (dx / rect.width) * 12,
+      x: -(dy / rect.height) * 10,
+      y: (dx / rect.width) * 10,
     });
 
-    // Magnetic: slight follow toward cursor
     setOffset({
-      x: dx * 0.08,
-      y: dy * 0.08,
+      x: dx * 0.06,
+      y: dy * 0.06,
+    });
+
+    // Light position tracks cursor as % of card
+    setLightPos({
+      x: ((e.clientX - rect.left) / rect.width) * 100,
+      y: ((e.clientY - rect.top) / rect.height) * 100,
     });
   }, []);
 
@@ -87,24 +92,57 @@ function LatestEpisodeCard({ episode }: { episode: Episode }) {
     setIsHovered(false);
   }, []);
 
+  const cardStagger = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
+  };
+
+  const itemFadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease },
+    },
+  };
+
+  const itemFadeLeft = {
+    hidden: { opacity: 0, x: -15 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.6, ease },
+    },
+  };
+
+  const lineDraw = {
+    hidden: { scaleX: 0 },
+    visible: {
+      scaleX: 1,
+      transition: { duration: 0.8, ease },
+    },
+  };
+
   return (
     <motion.div
-      className="max-w-2xl mx-auto"
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8, ease }}
+      className="max-w-4xl mx-auto"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={cardStagger}
     >
-      <div style={{ perspective: 800 }}>
+      <div style={{ perspective: 900 }}>
         <motion.div
           ref={cardRef}
-          className="relative rounded-3xl overflow-hidden p-10 md:p-14 text-center cursor-pointer"
+          className="relative rounded-3xl overflow-hidden p-8 md:p-12 cursor-pointer"
           style={{
-            background: "linear-gradient(135deg, rgba(230,226,197,0.08) 0%, rgba(230,226,197,0.03) 100%)",
-            border: "1px solid rgba(230,226,197,0.12)",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(230,226,197,0.1)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
+            background: "linear-gradient(135deg, rgba(230,226,197,0.07) 0%, rgba(230,226,197,0.02) 100%)",
+            border: "1px solid rgba(230,226,197,0.1)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(230,226,197,0.08)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
           }}
           animate={{
             rotateX: tilt.x,
@@ -112,50 +150,90 @@ function LatestEpisodeCard({ episode }: { episode: Episode }) {
             x: offset.x,
             y: offset.y,
             boxShadow: isHovered
-              ? "0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(230,226,197,0.15)"
-              : "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(230,226,197,0.1)",
+              ? "0 24px 64px rgba(0,0,0,0.45), inset 0 1px 0 rgba(230,226,197,0.14)"
+              : "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(230,226,197,0.08)",
           }}
           transition={{
             type: "spring",
-            stiffness: 200,
-            damping: 20,
+            stiffness: 180,
+            damping: 22,
             mass: 0.5,
           }}
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={handleMouseLeave}
         >
-          {/* Glass highlight streak */}
+          {/* Light that follows cursor */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none rounded-3xl"
+            animate={{
+              opacity: isHovered ? 1 : 0,
+              background: `radial-gradient(circle 400px at ${lightPos.x}% ${lightPos.y}%, rgba(230,226,197,0.1) 0%, transparent 70%)`,
+            }}
+            transition={{ opacity: { duration: 0.4 }, background: { duration: 0 } }}
+          />
+
+          {/* Edge highlight that shifts with tilt */}
           <motion.div
             className="absolute inset-0 pointer-events-none rounded-3xl"
             style={{
-              background: "linear-gradient(105deg, transparent 40%, rgba(230,226,197,0.06) 45%, rgba(230,226,197,0.1) 50%, rgba(230,226,197,0.06) 55%, transparent 60%)",
+              border: "1px solid transparent",
+              background: `linear-gradient(${135 + tilt.y * 2}deg, rgba(230,226,197,0.15) 0%, transparent 40%, transparent 60%, rgba(230,226,197,0.05) 100%) border-box`,
+              mask: "linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)",
+              WebkitMask: "linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)",
+              maskComposite: "exclude",
+              WebkitMaskComposite: "xor",
             }}
-            animate={{
-              opacity: isHovered ? 1 : 0,
-            }}
+            animate={{ opacity: isHovered ? 1 : 0 }}
             transition={{ duration: 0.4 }}
           />
 
-          <div className="w-12 h-px bg-hot-pink mb-6 mx-auto" />
-          <p className="text-burgundy/40 text-xs uppercase tracking-[0.2em] mb-4">
-            {episode.date}
-          </p>
-          <h2 className="font-serif text-3xl md:text-5xl text-burgundy mb-3">
-            {episode.title}
-          </h2>
-          <p className="text-burgundy/60 text-lg mb-6">
-            {episode.subtitle}
-          </p>
-          <p className="text-burgundy/50 text-base leading-relaxed mb-8">
-            {episode.excerpt}
-          </p>
-          <Link
-            href={`/episode/${episode.slug}`}
-            className="inline-block border border-burgundy/30 text-burgundy px-8 py-3 text-sm tracking-wider uppercase hover:bg-burgundy hover:text-cream transition-all duration-300"
-          >
-            Read Episode &rarr;
-          </Link>
+          {/* Two-column layout */}
+          <div className="grid md:grid-cols-[1fr,1.2fr] gap-8 md:gap-12 items-start">
+            {/* Left — Title & meta */}
+            <div>
+              <motion.div
+                className="w-10 h-px bg-hot-pink origin-left mb-5"
+                variants={lineDraw}
+              />
+              <motion.p
+                className="text-burgundy/40 text-xs uppercase tracking-[0.2em] mb-3"
+                variants={itemFadeLeft}
+              >
+                {episode.date}
+              </motion.p>
+              <motion.h2
+                className="font-serif text-3xl md:text-4xl text-burgundy mb-2"
+                variants={itemFadeLeft}
+              >
+                {episode.title}
+              </motion.h2>
+              <motion.p
+                className="text-burgundy/55 text-base md:text-lg"
+                variants={itemFadeLeft}
+              >
+                {episode.subtitle}
+              </motion.p>
+            </div>
+
+            {/* Right — Excerpt & CTA */}
+            <div>
+              <motion.p
+                className="text-burgundy/50 text-base leading-relaxed mb-8"
+                variants={itemFadeUp}
+              >
+                {episode.excerpt}
+              </motion.p>
+              <motion.div variants={itemFadeUp}>
+                <Link
+                  href={`/episode/${episode.slug}`}
+                  className="inline-block border border-burgundy/30 text-burgundy px-8 py-3 text-sm tracking-wider uppercase hover:bg-burgundy hover:text-cream transition-all duration-300 rounded-full"
+                >
+                  Read Episode &rarr;
+                </Link>
+              </motion.div>
+            </div>
+          </div>
         </motion.div>
       </div>
     </motion.div>
