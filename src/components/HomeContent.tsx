@@ -344,13 +344,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
           <h2 className="font-serif text-3xl md:text-5xl text-burgundy mb-10">
             Don&apos;t miss the next chapter.
           </h2>
-          <div className="relative">
-            <div
-              className="absolute inset-0 -m-8 rounded-full blur-3xl opacity-20"
-              style={{ background: "radial-gradient(circle, #FD05A0, transparent 70%)" }}
-            />
-            <GetSmokyButton variant="dark" />
-          </div>
+          <GetSmokyButton variant="dark" />
           <p className="text-burgundy/30 text-xs tracking-[0.2em] uppercase mt-16">
             &copy; 2025 The Bixt &middot; Rituals, Reality, and Recipes
           </p>

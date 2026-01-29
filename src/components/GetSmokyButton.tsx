@@ -38,17 +38,19 @@ export default function GetSmokyButton({ variant = "light" }: GetSmokyButtonProp
       rel="noopener noreferrer"
       className={`
         relative inline-block px-10 py-4 text-sm tracking-widest font-medium
-        backdrop-blur-md border rounded-full
-        transition-all duration-300 ease-out
+        rounded-full border
         ${isDark
-          ? "bg-cream/10 border-cream/30 text-cream hover:bg-cream/20 hover:border-cream/50"
-          : "bg-burgundy/10 border-burgundy/30 text-burgundy hover:bg-burgundy/20 hover:border-burgundy/50"
+          ? "border-hot-pink/60 text-cream"
+          : "border-burgundy/30 text-burgundy"
         }
       `}
+      style={{
+        backgroundColor: isDark ? "rgba(253, 5, 160, 0.12)" : "rgba(230, 226, 197, 0.1)",
+      }}
       animate={{
         x: position.x,
         y: position.y,
-        scale: isHovered ? 1.05 : 1,
+        scale: isHovered ? 1.1 : 1,
       }}
       transition={{
         type: "spring",
@@ -60,23 +62,23 @@ export default function GetSmokyButton({ variant = "light" }: GetSmokyButtonProp
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Glow effect */}
-      <motion.div
-        className="absolute inset-0 rounded-full blur-xl -z-10"
-        style={{ backgroundColor: "#8B6914" }}
-        animate={{
-          opacity: isHovered ? 0.6 : 0.3,
-          scale: isHovered ? 1.3 : 1,
-        }}
-        transition={{ duration: 0.3 }}
-      />
-
-      {/* Inner glow */}
+      {/* Pink glow behind */}
       <motion.div
         className="absolute inset-0 rounded-full -z-10"
-        style={{ boxShadow: "inset 0 0 20px rgba(139, 105, 20, 0.2)" }}
         animate={{
-          opacity: isHovered ? 1 : 0.5,
+          boxShadow: isHovered
+            ? "0 0 30px 8px rgba(253, 5, 160, 0.5), 0 0 60px 20px rgba(253, 5, 160, 0.2)"
+            : "0 0 15px 4px rgba(253, 5, 160, 0.25), 0 0 30px 10px rgba(253, 5, 160, 0.08)",
+        }}
+        transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+      />
+
+      {/* Hover fill */}
+      <motion.div
+        className="absolute inset-0 rounded-full -z-10"
+        style={{ backgroundColor: "#FD05A0" }}
+        animate={{
+          opacity: isHovered ? 0.25 : 0,
         }}
         transition={{ duration: 0.3 }}
       />
