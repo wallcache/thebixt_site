@@ -309,6 +309,9 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
   const smokyScrollOpacity = useTransform(heroProgress, [0, 0.15], [1, 0]);
   // Rain fades in as we pass through the O portal
   const rainOpacity = useTransform(heroProgress, [0.1, 0.3], [0, 1]);
+  // Hero background fades to transparent so rain shows through
+  const heroBgOpacity = useTransform(heroProgress, [0.15, 0.4], [1, 0]);
+  const heroBg = useTransform(heroBgOpacity, (o) => `rgba(8, 30, 40, ${o})`);
 
   // Delay smoky light fade-in until after loading screen (~2.2s)
   const [smokyVisible, setSmokyVisible] = useState(false);
@@ -328,9 +331,9 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
 
       {/* Section 1 — Hero with zoom-through-O portal */}
       <div ref={heroRef} className="relative z-10" style={{ height: "300vh" }}>
-        <div
+        <motion.div
           className="sticky top-0 h-screen overflow-hidden"
-          style={{ backgroundColor: "#081E28" }}
+          style={{ backgroundColor: heroBg }}
         >
           {/* Smoky light layer — fades in after loading, fades out on scroll */}
           <motion.div
@@ -402,7 +405,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
               />
             </motion.svg>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Rain layer — fades in after portal zoom-through, stays for remaining sections */}
