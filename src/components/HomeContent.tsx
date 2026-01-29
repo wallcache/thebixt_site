@@ -307,8 +307,8 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
   const portalOpacity = useTransform(heroProgress, [0.1, 0.4], [0, 1]);
   // Smoky light fades out as scroll begins
   const smokyScrollOpacity = useTransform(heroProgress, [0, 0.15], [1, 0]);
-  // Rain fades in after portal zoom-through
-  const rainOpacity = useTransform(heroProgress, [0.55, 0.75], [0, 1]);
+  // Rain fades in as we pass through the O portal
+  const rainOpacity = useTransform(heroProgress, [0.1, 0.3], [0, 1]);
 
   // Delay smoky light fade-in until after loading screen (~2.2s)
   const [smokyVisible, setSmokyVisible] = useState(false);
