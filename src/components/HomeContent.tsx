@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import BackgroundVideo from "@/components/BackgroundVideo";
+import DappledLight from "@/components/DappledLight";
 import TapedPhoto from "@/components/TapedPhoto";
 import GetSmokyButton from "@/components/GetSmokyButton";
 import { Episode } from "@/lib/episodes";
@@ -98,6 +99,15 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
   const clipPath = useTransform(circleRadius, (r) => `circle(${r}% at ${clipCenterRef.current})`);
   // Portal content fades in as circle grows
   const portalOpacity = useTransform(heroProgress, [0.1, 0.4], [0, 1]);
+  // Dappled light fades out as scroll begins
+  const dappledScrollOpacity = useTransform(heroProgress, [0, 0.15], [1, 0]);
+
+  // Delay dappled light fade-in until after loading screen (~2.2s)
+  const [dappledVisible, setDappledVisible] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setDappledVisible(true), 2200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const gridEpisodes = recentEpisodes.slice(1, 5);
 
@@ -114,6 +124,18 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
           className="sticky top-0 h-screen overflow-hidden"
           style={{ backgroundColor: "#081E28" }}
         >
+          {/* Dappled light layer — fades in after loading, fades out on scroll */}
+          <motion.div
+            className="absolute inset-0 z-[5]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: dappledVisible ? 1 : 0 }}
+            transition={{ duration: 1.5, ease: [0.4, 0, 0.2, 1] }}
+          >
+            <motion.div className="w-full h-full" style={{ opacity: dappledScrollOpacity }}>
+              <DappledLight speed={0.8} mouseInfluence={1.2} />
+            </motion.div>
+          </motion.div>
+
           {/* Portal content layer (behind) — revealed through the O via clip-path */}
           <motion.div
             className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6"
@@ -140,7 +162,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
                 transformOrigin: originPct,
               }}
             >
-              <h1 className="font-serif text-7xl md:text-9xl text-burgundy tracking-tight whitespace-nowrap">
+              <h1 className="font-serif text-5xl md:text-7xl text-burgundy tracking-[0.15em] whitespace-nowrap">
                 SM<span ref={oRef}>O</span>KY<span className="text-hot-pink">.</span>
               </h1>
             </motion.div>

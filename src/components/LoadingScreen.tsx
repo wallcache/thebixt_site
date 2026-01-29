@@ -34,7 +34,7 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
       className="absolute inset-0 flex items-center justify-center"
       style={{ backgroundColor: "#081E28" }}
     >
-      <h1 className="font-serif text-7xl md:text-9xl text-burgundy tracking-tight whitespace-nowrap">
+      <h1 className="font-serif text-5xl md:text-7xl text-burgundy tracking-[0.15em] whitespace-nowrap">
         {LETTERS.map((letter, i) => (
           <motion.span
             key={i}
