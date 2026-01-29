@@ -23,13 +23,7 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
 
       {/* Main content — always rendered so the hero is in place behind the loading screen */}
       <div>
-        {/* Hide nav during loading so it doesn't peek through */}
-        <div
-          className="transition-opacity duration-500"
-          style={{ opacity: isLoading ? 0 : 1 }}
-        >
-          <Navigation />
-        </div>
+        <Navigation visible={!isLoading} />
         <main
           className={`min-h-screen relative ${isHome ? "" : "pt-20"}`}
           style={{ zIndex: 10 }}

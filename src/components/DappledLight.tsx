@@ -52,10 +52,10 @@ const fragmentShader = `
     vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
     vec2 uvAspect = uv * aspect;
 
-    // Mouse distance — strong falloff so light only appears near cursor
+    // Mouse distance — very large, gentle falloff
     vec2 mouseNorm = uMouse * aspect;
     float mouseDist = length(mouseNorm - uvAspect);
-    float mouseProximity = smoothstep(0.5, 0.0, mouseDist) * uMouseInfluence;
+    float mouseProximity = smoothstep(1.2, 0.0, mouseDist) * uMouseInfluence;
 
     // Rotate UVs ~35 degrees for diagonal streaks
     float angle = 0.6;
@@ -78,16 +78,18 @@ const fragmentShader = `
     float pattern = n1 * 0.5 + n2 * 0.3 + n3 * 0.2;
     pattern = pattern * 0.5 + 0.5;
 
-    // Bright streak highlights
-    float streaks = smoothstep(0.38, 0.78, pattern);
+    // Hard-edged shapes — discrete streaks, not gradients
+    // This makes the mouse proximity non-circular: whole shapes appear/disappear
+    float shapes = smoothstep(0.44, 0.48, pattern);
 
-    // Combine with mouse proximity
-    float light = streaks * mouseProximity;
+    // Shapes masked by the large gentle proximity — entire streaks show
+    // because the shape edges dominate over the circular gradient
+    float light = shapes * mouseProximity;
 
-    // Subtle light blue
+    // Light blue
     vec3 color = vec3(0.5, 0.72, 0.88);
 
-    float alpha = light * 0.22;
+    float alpha = light * 0.45;
     gl_FragColor = vec4(color * alpha, alpha);
   }
 `;

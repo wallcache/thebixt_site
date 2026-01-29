@@ -71,14 +71,21 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
       const oRect = oEl.getBoundingClientRect();
       const boxRect = boxEl.getBoundingClientRect();
 
-      // Transform-origin: O center relative to the text box
-      const ox = ((oRect.left + oRect.width / 2 - boxRect.left) / boxRect.width) * 100;
-      const oy = ((oRect.top + oRect.height / 2 - boxRect.top) / boxRect.height) * 100;
+      // letter-spacing adds trailing space after each char — exclude it
+      // so we measure the visual center of the O glyph, not the O + trailing gap
+      const cs = window.getComputedStyle(oEl);
+      const ls = parseFloat(cs.letterSpacing) || 0;
+      const oVisualCenterX = oRect.left + (oRect.width - ls) / 2;
+      const oVisualCenterY = oRect.top + oRect.height / 2;
+
+      // Transform-origin: O glyph center relative to the text box
+      const ox = ((oVisualCenterX - boxRect.left) / boxRect.width) * 100;
+      const oy = ((oVisualCenterY - boxRect.top) / boxRect.height) * 100;
       setOriginPct(`${ox.toFixed(1)}% ${oy.toFixed(1)}%`);
 
-      // Clip-path center: O center relative to viewport
-      const vx = ((oRect.left + oRect.width / 2) / window.innerWidth) * 100;
-      const vy = ((oRect.top + oRect.height / 2) / window.innerHeight) * 100;
+      // Clip-path center: O glyph center relative to viewport
+      const vx = (oVisualCenterX / window.innerWidth) * 100;
+      const vy = (oVisualCenterY / window.innerHeight) * 100;
       clipCenterRef.current = `${vx.toFixed(1)}% ${vy.toFixed(1)}%`;
     };
 
