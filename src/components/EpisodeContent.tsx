@@ -6,7 +6,6 @@ import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Episode } from "@/lib/episodes";
 import TypewriterText from "./TypewriterText";
-import TapedPhoto from "./TapedPhoto";
 import EpisodeSensesGrid from "./EpisodeSensesGrid";
 
 interface EpisodeContentProps {
@@ -52,18 +51,6 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
 
   return (
     <div ref={containerRef} className="min-h-screen -mt-20 pt-20">
-      {/* Header Image */}
-      <div className="flex justify-center pt-8">
-        <TapedPhoto
-          src={episode.headerImage}
-          alt={episode.title}
-          caption={episode.date}
-          rotation={1.5}
-          isDark
-          size="medium"
-        />
-      </div>
-
       <div className="max-w-2xl mx-auto px-6 py-12">
         <motion.div
           initial={{ opacity: 0, x: -10 }}
@@ -90,7 +77,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
             >
               {episode.date}
             </motion.p>
-            <h1 className="font-serif text-3xl md:text-4xl text-burgundy mb-4">
+            <h1 className="font-serif text-3xl md:text-4xl text-hot-pink mb-4">
               <TypewriterText text={episode.title} wordByWord />
             </h1>
             <p className="text-burgundy/70 text-lg">
@@ -117,7 +104,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="font-serif text-xl text-burgundy/80 mb-6 text-center">
+            <h2 className="font-serif text-xl text-hot-pink mb-6 text-center">
               Experience This Episode
             </h2>
             <EpisodeSensesGrid senses={episode.fourSenses} />
@@ -140,32 +127,6 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
             ))}
           </motion.div>
 
-          {episode.images && episode.images.length > 0 && (
-            <motion.section
-              className="mt-16 pt-12 border-t border-burgundy/20"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <h2 className="font-serif text-2xl text-burgundy mb-8 text-center">
-                <TypewriterText text="Moments" wordByWord />
-              </h2>
-              <div className="grid grid-cols-2 gap-4 justify-items-center">
-                {episode.images.map((image, index) => (
-                  <TapedPhoto
-                    key={index}
-                    src={image.src}
-                    alt={image.alt}
-                    caption={image.caption}
-                    rotation={image.rotation}
-                    isDark
-                    size="small"
-                  />
-                ))}
-              </div>
-            </motion.section>
-          )}
 
           {episode.recipe && (
             <motion.section
@@ -175,7 +136,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="font-serif text-2xl text-burgundy mb-8">
+              <h2 className="font-serif text-2xl text-hot-pink mb-8">
                 <TypewriterText text={episode.recipe.title} wordByWord />
               </h2>
 

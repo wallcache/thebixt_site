@@ -25,7 +25,7 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
       <div>
         <Navigation visible={!isLoading} />
         <main
-          className={`min-h-screen relative ${isHome ? "" : "pt-20"}`}
+          className={`min-h-screen relative ${isHome ? "" : "pt-32"}`}
           style={{ zIndex: 10 }}
         >
           <AnimatePresence mode="wait">
