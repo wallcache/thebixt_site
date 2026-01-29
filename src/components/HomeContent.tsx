@@ -64,6 +64,11 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
   const heroScale = useTransform(heroProgress, [0, 0.7], [1, 50]);
   // Text fades out as it zooms past the viewer
   const textOpacity = useTransform(heroProgress, [0.3, 0.6], [1, 0]);
+  // Circular clip-path expands to reveal portal content through the O
+  const circleRadius = useTransform(heroProgress, [0.05, 0.65], [0, 110]);
+  const clipPath = useTransform(circleRadius, (r) => `circle(${r}% at 50% 50%)`);
+  // Portal content fades in as circle grows
+  const portalOpacity = useTransform(heroProgress, [0.1, 0.4], [0, 1]);
 
   const gridEpisodes = recentEpisodes.slice(1, 5);
 
@@ -74,58 +79,46 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
     <div className="relative">
       <BackgroundVideo />
 
-      {/* Section 1 — Hero with zoom-through-O */}
-      {/* Tall scroll container to give room for the zoom animation */}
+      {/* Section 1 — Hero with zoom-through-O portal */}
       <div ref={heroRef} className="relative z-10" style={{ height: "300vh" }}>
-        {/* Sticky wrapper — keeps the logo centered on screen during scroll */}
-        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
+        <div
+          className="sticky top-0 h-screen overflow-hidden"
+          style={{ backgroundColor: "#081E28" }}
+        >
+          {/* Portal content layer (behind) — revealed through the O via clip-path */}
           <motion.div
-            className="flex items-center justify-center"
-            style={{
-              scale: heroScale,
-              opacity: textOpacity,
-              // Transform-origin centered on the O (3rd of 6 chars including period)
-              // O is roughly at 40% from the left of the text
-              transformOrigin: "42% 50%",
-            }}
+            className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6"
+            style={{ clipPath, opacity: portalOpacity }}
           >
-            <h1 className="font-serif text-7xl md:text-9xl text-burgundy tracking-tight whitespace-nowrap">
-              Smoky<span className="text-hot-pink">.</span>
-            </h1>
+            <div className="max-w-[800px] text-center">
+              <p className="font-serif text-2xl md:text-4xl text-burgundy leading-relaxed md:leading-relaxed">
+                A newsletter where escapism meets realism.
+              </p>
+              <p className="font-serif text-2xl md:text-4xl text-burgundy leading-relaxed md:leading-relaxed mt-6">
+                Through the fictional world of The Silver Spooners — friends navigating love, life, and London — we invite you to fall back in love with your own story.
+              </p>
+              <div className="w-16 h-px bg-hot-pink mt-12 mx-auto" />
+            </div>
           </motion.div>
+
+          {/* Text layer (in front) — scales up through the O */}
+          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+            <motion.div
+              style={{
+                scale: heroScale,
+                opacity: textOpacity,
+                // Origin at center of the O counter-space
+                // O is ~52% across "Smoky.", ~43% from top (above center due to descenders)
+                transformOrigin: "52% 43%",
+              }}
+            >
+              <h1 className="font-serif text-7xl md:text-9xl text-burgundy tracking-tight whitespace-nowrap">
+                Smoky<span className="text-hot-pink">.</span>
+              </h1>
+            </motion.div>
+          </div>
         </div>
       </div>
-
-      {/* Section 2 — Mission Statement */}
-      <section className="min-h-[80vh] flex flex-col items-center justify-center px-6 relative z-10">
-        <motion.div
-          className="max-w-[800px] text-center"
-          variants={staggerContainerSlow}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <motion.p
-            className="font-serif text-2xl md:text-4xl text-burgundy leading-relaxed md:leading-relaxed"
-            variants={fadeUpSlow}
-          >
-            A newsletter where escapism meets realism.
-          </motion.p>
-          <motion.p
-            className="font-serif text-2xl md:text-4xl text-burgundy leading-relaxed md:leading-relaxed mt-6"
-            variants={fadeUpSlow}
-          >
-            Through the fictional world of The Silver Spooners — friends navigating love, life, and London — we invite you to fall back in love with your own story.
-          </motion.p>
-        </motion.div>
-        <motion.div
-          className="w-16 h-px bg-hot-pink mt-12"
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.5, ease }}
-        />
-      </section>
 
       {/* Section 3 — Latest Episode Feature */}
       <section className="py-24 md:py-32 px-6 relative z-10">
