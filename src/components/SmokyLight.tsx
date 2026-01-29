@@ -66,6 +66,7 @@ const fragmentShader = `
     vec2 mouse = vec2((uMouse.x - 0.5) * ar, uMouse.y - 0.5);
 
     // --- Domain warping (Inigo Quilez style) ---
+    // Mouse influence via continuous displacement (no atan — avoids ±π wrapping jumps)
 
     // Base coordinates — large scale, slow drift
     vec2 q = p * 1.2;
@@ -76,9 +77,9 @@ const fragmentShader = `
     float n1 = fbm(q);
     vec2 warp1 = vec2(n1, fbm(q + vec2(5.2, 1.3)));
 
-    // Mouse rotation of warp field
-    float mouseAngle = atan(mouse.y, mouse.x + 0.001);
-    warp1 = rot(mouseAngle * 0.5 * uMouseInfluence) * warp1;
+    // Mouse rotates warp via continuous sin/cos of position (no atan discontinuity)
+    float mouseRot = (mouse.x * 0.8 + mouse.y * 0.5) * uMouseInfluence;
+    warp1 = rot(mouseRot) * warp1;
 
     // Second warp — folding
     vec2 r = q + warp1 * 1.6 + vec2(t * 0.04, -t * 0.03);
@@ -99,39 +100,39 @@ const fragmentShader = `
     float edgeGlow = 1.0 - smoothstep(0.0, 0.08, abs(smoke - 0.42));
     edgeGlow *= 0.3;
 
-    // --- Radial light from top-right ---
-    // Light source in top-right corner
-    vec2 lightSrc = vec2(0.5 * ar, 0.5);  // top-right in centered coords
-    vec2 toLight = lightSrc - p;
-    float distFromLight = length(toLight);
-    float angleFromLight = atan(toLight.y, toLight.x);
+    // --- Radial light from off-screen top-right ---
+    // Source is well beyond the viewport corner
+    vec2 lightSrc = vec2(ar * 0.9, 0.9);
+    vec2 fromLight = p - lightSrc;
+    float distFromLight = length(fromLight);
 
     // Radial falloff — brighter near source, fades across screen
-    float radialFalloff = exp(-distFromLight * 1.0);
+    float radialFalloff = exp(-distFromLight * 0.7);
 
-    // --- Light streaks ---
-    // Radial rays spreading out from the top-right light source
-    // Use angle from light + noise to create irregular shafts
-    float rayAngle = angleFromLight;
-    vec2 streakUV = vec2(rayAngle * 3.0, distFromLight * 1.5);
-    streakUV += mouse * uMouseInfluence * 0.2;
-    streakUV.x += t * 0.03;
+    // --- Light streaks — constantly rotating rays from off-screen source ---
+    // Angle from the light source to this pixel
+    float rayAngle = atan(fromLight.y, fromLight.x);
 
-    float streakNoise = fbm(streakUV);
-    // Wide bright shafts
-    float streaks = smoothstep(0.3, 0.5, streakNoise) * smoothstep(0.7, 0.5, streakNoise);
-    // Broader soft glow
-    float softStreaks = smoothstep(0.2, 0.45, streakNoise) * smoothstep(0.8, 0.55, streakNoise);
+    // Constant rotation + mouse nudges the angle
+    float rotatingAngle = rayAngle + t * 0.12 + mouse.x * uMouseInfluence * 0.4;
 
-    // Streaks follow radial falloff and show through smoke gaps
+    // Two streak layers at different scales for depth
+    float streak1 = fbm(vec2(rotatingAngle * 4.0, distFromLight * 0.8 + t * 0.05));
+    float streak2 = fbm(vec2(rotatingAngle * 2.5 + 3.7, distFromLight * 0.5 - t * 0.03));
+
+    // Bright bands
+    float streaks = smoothstep(0.3, 0.5, streak1) * smoothstep(0.7, 0.5, streak1);
+    float softStreaks = smoothstep(0.25, 0.48, streak2) * smoothstep(0.75, 0.52, streak2);
+
+    // Streaks visible through smoke gaps, stronger near source
     float streakMask = smoothstep(0.55, 0.3, smoke) * radialFalloff;
     streaks *= streakMask;
     softStreaks *= streakMask;
 
     // Final intensity — radial light + smoke + streaks
-    float intensity = lightThrough * 0.22 * (0.4 + radialFalloff * 0.6);
-    intensity += edgeGlow * (0.5 + radialFalloff * 0.5);
-    intensity += streaks * 0.4 + softStreaks * 0.15;
+    float intensity = lightThrough * 0.22 * (0.3 + radialFalloff * 0.7);
+    intensity += edgeGlow * (0.4 + radialFalloff * 0.6);
+    intensity += streaks * 0.4 + softStreaks * 0.18;
     intensity -= shadow * 0.12;
     intensity = clamp(intensity, 0.0, 1.0);
 
