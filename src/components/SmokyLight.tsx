@@ -99,25 +99,32 @@ const fragmentShader = `
     float edgeGlow = 1.0 - smoothstep(0.0, 0.08, abs(smoke - 0.42));
     edgeGlow *= 0.3;
 
-    // --- Light streaks ---
-    // Elongated shafts of light from above, filtering through smoke gaps
-    vec2 streakUV = p;
-    streakUV += mouse * uMouseInfluence * 0.2;
-    // Heavy Y squeeze — makes tall narrow streaks
-    streakUV.y *= 0.15;
-    streakUV.x *= 2.0;
-    // Slow rotation + mouse steers angle
-    streakUV = rot(t * 0.02 + mouseAngle * 0.15) * streakUV;
-    streakUV += vec2(t * 0.015, 0.0);
+    // --- Radial light from top-right ---
+    // Light source in top-right corner
+    vec2 lightSrc = vec2(0.5 * ar, 0.5);  // top-right in centered coords
+    vec2 toLight = lightSrc - p;
+    float distFromLight = length(toLight);
+    float angleFromLight = atan(toLight.y, toLight.x);
 
-    float streakNoise = fbm(streakUV * 1.2);
-    // Wide bright bands
+    // Radial falloff — brighter near source, fades across screen
+    float radialFalloff = exp(-distFromLight * 1.0);
+
+    // --- Light streaks ---
+    // Radial rays spreading out from the top-right light source
+    // Use angle from light + noise to create irregular shafts
+    float rayAngle = angleFromLight;
+    vec2 streakUV = vec2(rayAngle * 3.0, distFromLight * 1.5);
+    streakUV += mouse * uMouseInfluence * 0.2;
+    streakUV.x += t * 0.03;
+
+    float streakNoise = fbm(streakUV);
+    // Wide bright shafts
     float streaks = smoothstep(0.3, 0.5, streakNoise) * smoothstep(0.7, 0.5, streakNoise);
-    // Even broader soft glow
+    // Broader soft glow
     float softStreaks = smoothstep(0.2, 0.45, streakNoise) * smoothstep(0.8, 0.55, streakNoise);
 
-    // Streaks show through lighter smoke regions
-    float streakMask = smoothstep(0.55, 0.3, smoke);
+    // Streaks follow radial falloff and show through smoke gaps
+    float streakMask = smoothstep(0.55, 0.3, smoke) * radialFalloff;
     streaks *= streakMask;
     softStreaks *= streakMask;
 
@@ -125,17 +132,19 @@ const fragmentShader = `
     float pMouseDist = length(p - mouse);
     float mouseGlow = smoothstep(0.5, 0.0, pMouseDist) * uMouseInfluence * 0.15;
 
-    // Final intensity — dim smoke + visible streaks
-    float intensity = lightThrough * 0.22 + edgeGlow + mouseGlow;
-    intensity += streaks * 0.35 + softStreaks * 0.12;
-    intensity -= shadow * 0.15;
+    // Final intensity — radial light + smoke + streaks
+    float intensity = lightThrough * 0.22 * (0.4 + radialFalloff * 0.6);
+    intensity += edgeGlow * (0.5 + radialFalloff * 0.5);
+    intensity += mouseGlow;
+    intensity += streaks * 0.4 + softStreaks * 0.15;
+    intensity -= shadow * 0.12;
     intensity = clamp(intensity, 0.0, 1.0);
 
-    // Warm cream/amber palette — streaks are warmer
+    // Warm cream/amber palette — warmer near light source
     vec3 warmLight = vec3(0.95, 0.88, 0.65);
     vec3 coolHaze = vec3(0.55, 0.6, 0.65);
     vec3 streakColor = vec3(1.0, 0.92, 0.72);
-    vec3 color = mix(coolHaze, warmLight, lightThrough);
+    vec3 color = mix(coolHaze, warmLight, radialFalloff * 0.7 + lightThrough * 0.3);
     color = mix(color, streakColor, (streaks + softStreaks * 0.3) * streakMask);
 
     float alpha = intensity * 0.7;
