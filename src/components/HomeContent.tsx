@@ -351,10 +351,10 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
           >
             <div className="max-w-[800px] text-center">
               <p className="font-serif text-2xl md:text-4xl text-burgundy leading-relaxed md:leading-relaxed">
-                A newsletter where escapism meets realism.
+                A newsletter where the story is fictional but the recommendations are impeccably real.
               </p>
               <p className="font-serif text-2xl md:text-4xl text-burgundy leading-relaxed md:leading-relaxed mt-6">
-                Through the fictional world of The Silver Spooners — friends navigating love, life, and London — we invite you to fall back in love with your own story.
+                Follow The Silver Spooners through London — then steal their taste.
               </p>
               <div className="w-16 h-px bg-hot-pink mt-12 mx-auto" />
             </div>
