@@ -13,8 +13,8 @@ interface NavLinkProps {
 export default function NavLink({ href, children, isActive }: NavLinkProps) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const baseColor = isActive ? "#E6E2C5" : "rgba(230, 226, 197, 0.6)";
-  const hoverColor = "#E6E2C5";
+  const baseColor = isActive ? "#081E28" : "rgba(8, 30, 40, 0.55)";
+  const hoverColor = "#081E28";
 
   return (
     <Link

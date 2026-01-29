@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 
 interface LoadingScreenProps {
@@ -18,21 +18,13 @@ const ALL_IN_TIME =
 const HOLD_TIME = 600;
 
 export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
-  const [exiting, setExiting] = useState(false);
-
   useEffect(() => {
-    // After all letters are in + hold time, begin exit
-    const exitTimer = setTimeout(() => {
-      setExiting(true);
-    }, ALL_IN_TIME + HOLD_TIME);
-
-    // After exit animation completes, notify parent
+    // After all letters are in + hold time, hand off to hero (no fade — hero text is identical underneath)
     const doneTimer = setTimeout(() => {
       onLoadingComplete();
-    }, ALL_IN_TIME + HOLD_TIME + 400);
+    }, ALL_IN_TIME + HOLD_TIME);
 
     return () => {
-      clearTimeout(exitTimer);
       clearTimeout(doneTimer);
     };
   }, [onLoadingComplete]);
@@ -42,11 +34,7 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
       className="absolute inset-0 flex items-center justify-center"
       style={{ backgroundColor: "#081E28" }}
     >
-      <motion.h1
-        className="font-serif text-7xl md:text-9xl text-burgundy tracking-tight whitespace-nowrap"
-        animate={exiting ? { opacity: 0 } : { opacity: 1 }}
-        transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-      >
+      <h1 className="font-serif text-7xl md:text-9xl text-burgundy tracking-tight whitespace-nowrap">
         {LETTERS.map((letter, i) => (
           <motion.span
             key={i}
@@ -75,7 +63,7 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
         >
           .
         </motion.span>
-      </motion.h1>
+      </h1>
     </div>
   );
 }

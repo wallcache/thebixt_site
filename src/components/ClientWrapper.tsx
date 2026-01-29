@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import LoadingScreen from "./LoadingScreen";
 import Navigation from "./Navigation";
@@ -40,20 +40,12 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
         </main>
       </div>
 
-      {/* Loading screen — overlays on top, fades out to reveal hero already in position */}
-      <AnimatePresence>
-        {isLoading && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-            className="fixed inset-0 z-50"
-            style={{ pointerEvents: isLoading ? "auto" : "none" }}
-          >
-            <LoadingScreen onLoadingComplete={handleLoadingComplete} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Loading screen — overlays on top, removed instantly since hero text is identical underneath */}
+      {isLoading && (
+        <div className="fixed inset-0 z-50">
+          <LoadingScreen onLoadingComplete={handleLoadingComplete} />
+        </div>
+      )}
     </>
   );
 }
