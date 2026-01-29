@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import { siteConfig } from "@/data";
 import NavLink from "./NavLink";
@@ -23,7 +23,6 @@ export default function Navigation({ visible = true }: NavigationProps) {
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
-  const [navOffset, setNavOffset] = useState({ x: 0, y: 0 });
   const navRef = useRef<HTMLElement>(null);
   const exploreTimeout = useRef<NodeJS.Timeout | null>(null);
   const { scrollY } = useScroll();
@@ -33,22 +32,6 @@ export default function Navigation({ visible = true }: NavigationProps) {
     pathname === "/brands" ||
     pathname === "/silver-spooners" ||
     pathname === "/featured";
-
-  const handleNavMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    const nav = navRef.current;
-    if (!nav) return;
-    const rect = nav.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    setNavOffset({
-      x: (e.clientX - cx) * 0.04,
-      y: (e.clientY - cy) * 0.15,
-    });
-  }, []);
-
-  const handleNavMouseLeave = useCallback(() => {
-    setNavOffset({ x: 0, y: 0 });
-  }, []);
 
   // Close menu on route change
   useEffect(() => {
@@ -85,17 +68,11 @@ export default function Navigation({ visible = true }: NavigationProps) {
           animate={{
             y: shouldHide && !menuOpen ? "-120%" : "0%",
             opacity: shouldHide && !menuOpen ? 0 : 1,
-            x: navOffset.x,
-            translateY: navOffset.y,
           }}
           transition={{
             y: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
             opacity: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
-            x: { type: "spring", stiffness: 150, damping: 15, mass: 0.2 },
-            translateY: { type: "spring", stiffness: 150, damping: 15, mass: 0.2 },
           }}
-          onMouseMove={handleNavMouseMove}
-          onMouseLeave={handleNavMouseLeave}
         >
           <div className="px-6 md:px-10 py-4 flex items-center justify-between">
             <Link href="/" className="hover:opacity-70 transition-opacity">
@@ -165,17 +142,15 @@ export default function Navigation({ visible = true }: NavigationProps) {
                       exit={{ opacity: 0, y: -4 }}
                       transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
                     >
-                      <div className="py-2">
+                      <div className="py-2 px-5 flex flex-col gap-1">
                         {explorePages.map((item) => (
-                          <Link
+                          <NavLink
                             key={item.href}
                             href={item.href}
-                            className="block px-5 py-2 text-sm tracking-wide transition-colors duration-200 hover:text-hot-pink"
-                            style={{ color: pathname === item.href ? "#FD05A0" : "#081E28" }}
-                            onClick={() => setExploreOpen(false)}
+                            isActive={pathname === item.href}
                           >
                             {item.label}
-                          </Link>
+                          </NavLink>
                         ))}
                       </div>
                     </motion.div>
