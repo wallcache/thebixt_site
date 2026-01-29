@@ -7,6 +7,12 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-
 import { siteConfig } from "@/data";
 import NavLink from "./NavLink";
 
+const explorePages = [
+  { href: "/brands", label: "Brands" },
+  { href: "/silver-spooners", label: "The Silver Spooners" },
+  { href: "/featured", label: "Featured" },
+];
+
 interface NavigationProps {
   visible?: boolean;
 }
@@ -16,10 +22,17 @@ export default function Navigation({ visible = true }: NavigationProps) {
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [exploreOpen, setExploreOpen] = useState(false);
   const [navOffset, setNavOffset] = useState({ x: 0, y: 0 });
   const navRef = useRef<HTMLElement>(null);
+  const exploreTimeout = useRef<NodeJS.Timeout | null>(null);
   const { scrollY } = useScroll();
   const lastScrollY = useRef(0);
+
+  const isExplorePath =
+    pathname === "/brands" ||
+    pathname === "/silver-spooners" ||
+    pathname === "/featured";
 
   const handleNavMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
     const nav = navRef.current;
@@ -99,9 +112,76 @@ export default function Navigation({ visible = true }: NavigationProps) {
               <NavLink href="/episodes" isActive={pathname === "/episodes"}>
                 Past Episodes
               </NavLink>
-              <NavLink href="/brands" isActive={pathname === "/brands"}>
-                Brands
-              </NavLink>
+              {/* Explore dropdown */}
+              <div
+                className="relative"
+                onMouseEnter={() => {
+                  if (exploreTimeout.current) clearTimeout(exploreTimeout.current);
+                  setExploreOpen(true);
+                }}
+                onMouseLeave={() => {
+                  exploreTimeout.current = setTimeout(() => setExploreOpen(false), 150);
+                }}
+              >
+                <button
+                  className="relative text-sm tracking-wide overflow-hidden block bg-transparent border-none cursor-pointer"
+                  style={{ height: "1.5em" }}
+                >
+                  <span className="relative block overflow-hidden" style={{ height: "1.5em" }}>
+                    <span className="invisible block whitespace-nowrap font-semibold">Explore</span>
+                    <motion.span
+                      className="absolute top-0 left-0 block whitespace-nowrap"
+                      style={{ color: isExplorePath ? "#081E28" : "rgba(8, 30, 40, 0.55)" }}
+                      animate={{ y: exploreOpen ? "-100%" : 0 }}
+                      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                    >
+                      Explore
+                    </motion.span>
+                    <motion.span
+                      className="absolute top-0 left-0 block whitespace-nowrap font-semibold"
+                      style={{ color: "#081E28" }}
+                      animate={{ y: exploreOpen ? 0 : "100%" }}
+                      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                    >
+                      Explore
+                    </motion.span>
+                  </span>
+                  <motion.span
+                    className="absolute bottom-0 left-0 h-[1px]"
+                    style={{ backgroundColor: "#081E28" }}
+                    initial={{ width: "0%" }}
+                    animate={{ width: exploreOpen ? "100%" : "0%" }}
+                    transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                  />
+                </button>
+
+                <AnimatePresence>
+                  {exploreOpen && (
+                    <motion.div
+                      className="absolute top-full left-1/2 mt-3 min-w-[180px] rounded-xl shadow-lg overflow-hidden backdrop-blur-md"
+                      style={{ backgroundColor: "rgba(230, 226, 197, 0.95)", x: "-50%" }}
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
+                    >
+                      <div className="py-2">
+                        {explorePages.map((item) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className="block px-5 py-2 text-sm tracking-wide transition-colors duration-200 hover:text-hot-pink"
+                            style={{ color: pathname === item.href ? "#FD05A0" : "#081E28" }}
+                            onClick={() => setExploreOpen(false)}
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
               <NavLink href="/about" isActive={pathname === "/about"}>
                 About
               </NavLink>
@@ -168,6 +248,8 @@ export default function Navigation({ visible = true }: NavigationProps) {
             {[
               { href: "/episodes", label: "Past Episodes" },
               { href: "/brands", label: "Brands" },
+              { href: "/silver-spooners", label: "The Silver Spooners" },
+              { href: "/featured", label: "Featured" },
               { href: "/about", label: "About" },
             ].map((item, i) => (
               <motion.div
@@ -194,7 +276,7 @@ export default function Navigation({ visible = true }: NavigationProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.4, delay: 0.24, ease: [0.4, 0, 0.2, 1] }}
+              transition={{ duration: 0.4, delay: 0.4, ease: [0.4, 0, 0.2, 1] }}
             >
               <a
                 href={siteConfig.whatsappLink}
