@@ -129,21 +129,24 @@ const fragmentShader = `
     streaks *= streakMask;
     softStreaks *= streakMask;
 
-    // Final intensity — radial light + smoke + streaks
-    float intensity = lightThrough * 0.22 * (0.3 + radialFalloff * 0.7);
+    // Final intensity — brighter overall
+    float intensity = lightThrough * 0.32 * (0.3 + radialFalloff * 0.7);
     intensity += edgeGlow * (0.4 + radialFalloff * 0.6);
     intensity += streaks * 0.4 + softStreaks * 0.18;
-    intensity -= shadow * 0.12;
+    intensity -= shadow * 0.08;
     intensity = clamp(intensity, 0.0, 1.0);
 
-    // Warm cream/amber palette — warmer near light source
+    // Warm cream/amber palette with subtle pink — warmer near light source
     vec3 warmLight = vec3(0.95, 0.88, 0.65);
-    vec3 coolHaze = vec3(0.55, 0.6, 0.65);
+    vec3 coolHaze = vec3(0.6, 0.55, 0.62);
+    vec3 pinkTint = vec3(0.9, 0.45, 0.6);
     vec3 streakColor = vec3(1.0, 0.92, 0.72);
     vec3 color = mix(coolHaze, warmLight, radialFalloff * 0.7 + lightThrough * 0.3);
+    // Subtle pink in the mid-tones of the smoke
+    color = mix(color, pinkTint, smoke * 0.12);
     color = mix(color, streakColor, (streaks + softStreaks * 0.3) * streakMask);
 
-    float alpha = intensity * 0.7;
+    float alpha = intensity * 0.8;
     gl_FragColor = vec4(color * alpha, alpha);
   }
 `;
