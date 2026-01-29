@@ -11,7 +11,7 @@ const vertexShader = `
   }
 `;
 
-// Diagonal light-blue dappled streaks — mouse-reactive, transparent background
+// Rain-on-pavement ripple effect — more rain near mouse, fluid & liquidy
 const fragmentShader = `
   precision highp float;
 
@@ -22,29 +22,54 @@ const fragmentShader = `
 
   varying vec2 vUv;
 
-  vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+  // Hash functions for pseudo-random per-cell values
+  vec2 hash22(vec2 p) {
+    p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
+    return fract(sin(p) * 43758.5453);
+  }
+  float hash12(vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+  }
 
-  float snoise(vec2 v) {
-    const vec4 C = vec4(0.211324865405187, 0.366025403784439,
-                        -0.577350269189626, 0.024390243902439);
-    vec2 i  = floor(v + dot(v, C.yy));
-    vec2 x0 = v - i + dot(i, C.xx);
-    vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-    vec4 x12 = x0.xyxy + C.xxzz;
-    x12.xy -= i1;
-    i = mod(i, 289.0);
-    vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
-    vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
-    m = m*m; m = m*m;
-    vec3 x = 2.0 * fract(p * C.www) - 1.0;
-    vec3 h = abs(x) - 0.5;
-    vec3 ox = floor(x + 0.5);
-    vec3 a0 = x - ox;
-    m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
-    vec3 g;
-    g.x = a0.x * x0.x + h.x * x0.y;
-    g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-    return 130.0 * dot(m, g);
+  // Single raindrop ripple layer at a given grid scale
+  float rippleLayer(vec2 uv, float t, float scale, float speed) {
+    float result = 0.0;
+    vec2 p = uv * scale;
+    vec2 cell = floor(p);
+    vec2 f = fract(p);
+
+    // Check 3x3 neighbourhood for drops
+    for (int x = -1; x <= 1; x++) {
+      for (int y = -1; y <= 1; y++) {
+        vec2 neighbour = vec2(float(x), float(y));
+        vec2 id = cell + neighbour;
+
+        // Random drop position within cell and time phase
+        vec2 dropOffset = hash22(id);
+        float phase = hash12(id + 0.5);
+
+        vec2 diff = neighbour + dropOffset - f;
+        float dist = length(diff);
+
+        // Repeating drop cycle — each drop restarts at a random phase
+        float cycle = fract(t * speed + phase);
+
+        // Expanding ring radius
+        float radius = cycle * 0.9;
+
+        // Ring shape: thin band at the expanding edge
+        float ring = 1.0 - smoothstep(0.0, 0.06, abs(dist - radius));
+
+        // Fade out as ripple expands
+        float fade = (1.0 - cycle) * (1.0 - cycle);
+
+        // Only show if drop has "landed" (dist < max radius)
+        float visible = smoothstep(0.9, 0.0, dist);
+
+        result += ring * fade * visible;
+      }
+    }
+    return result;
   }
 
   void main() {
@@ -52,44 +77,28 @@ const fragmentShader = `
     vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
     vec2 uvAspect = uv * aspect;
 
-    // Mouse distance — very large, gentle falloff
+    // Mouse proximity — controls rain density/brightness
     vec2 mouseNorm = uMouse * aspect;
     float mouseDist = length(mouseNorm - uvAspect);
-    float mouseProximity = smoothstep(1.2, 0.0, mouseDist) * uMouseInfluence;
+    float mouseProximity = smoothstep(1.0, 0.0, mouseDist) * uMouseInfluence;
 
-    // Rotate UVs ~35 degrees for diagonal streaks
-    float angle = 0.6;
-    float ca = cos(angle);
-    float sa = sin(angle);
-    vec2 centered = uv - 0.5;
-    vec2 rotUv = vec2(ca * centered.x - sa * centered.y,
-                      sa * centered.x + ca * centered.y) + 0.5;
+    float t = uTime;
 
-    // Stretch for elongated streak shapes
-    vec2 streakUv = rotUv * vec2(1.5, 5.0);
+    // Multiple ripple layers at different scales and speeds for depth
+    float r1 = rippleLayer(uvAspect, t, 5.0, 0.4);
+    float r2 = rippleLayer(uvAspect + 3.7, t, 8.0, 0.55);
+    float r3 = rippleLayer(uvAspect + 7.3, t, 12.0, 0.7);
 
-    float t = uTime * 0.1;
+    // Combine — larger scale (r1) is bolder, smaller scales are subtler
+    float ripples = r1 * 0.5 + r2 * 0.35 + r3 * 0.2;
 
-    // Layered simplex noise for organic dappled streaks
-    float n1 = snoise(streakUv * 1.5 + vec2(t * 0.4, t * 0.6));
-    float n2 = snoise(streakUv * 2.5 + vec2(-t * 0.3, t * 0.5));
-    float n3 = snoise(streakUv * 4.0 + vec2(t * 0.5, -t * 0.4)) * 0.5;
+    // Apply mouse proximity — more rain near cursor
+    float intensity = ripples * (0.08 + mouseProximity * 0.9);
 
-    float pattern = n1 * 0.5 + n2 * 0.3 + n3 * 0.2;
-    pattern = pattern * 0.5 + 0.5;
+    // Wet pavement highlight colour — cool blue-grey
+    vec3 color = vec3(0.55, 0.7, 0.85);
 
-    // Hard-edged shapes — discrete streaks, not gradients
-    // This makes the mouse proximity non-circular: whole shapes appear/disappear
-    float shapes = smoothstep(0.44, 0.48, pattern);
-
-    // Shapes masked by the large gentle proximity — entire streaks show
-    // because the shape edges dominate over the circular gradient
-    float light = shapes * mouseProximity;
-
-    // Light blue
-    vec3 color = vec3(0.5, 0.72, 0.88);
-
-    float alpha = light * 0.45;
+    float alpha = clamp(intensity * 0.6, 0.0, 1.0);
     gl_FragColor = vec4(color * alpha, alpha);
   }
 `;
