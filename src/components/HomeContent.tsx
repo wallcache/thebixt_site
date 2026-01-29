@@ -174,6 +174,33 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
               </h1>
             </motion.div>
           </div>
+
+          {/* Bouncing scroll chevron */}
+          <motion.div
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: dappledVisible ? 1 : 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            style={{ opacity: dappledScrollOpacity }}
+          >
+            <motion.svg
+              width="28"
+              height="16"
+              viewBox="0 0 28 16"
+              fill="none"
+              className="text-burgundy/50"
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <path
+                d="M2 2L14 13L26 2"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </motion.svg>
+          </motion.div>
         </div>
       </div>
 

@@ -40,7 +40,7 @@ export default function GetSmokyButton({ variant = "light" }: GetSmokyButtonProp
         relative inline-block px-10 py-4 text-sm tracking-widest font-medium
         rounded-full border
         ${isDark
-          ? "border-hot-pink/60 text-cream"
+          ? "border-hot-pink/60 text-burgundy"
           : "border-burgundy/30 text-burgundy"
         }
       `}
