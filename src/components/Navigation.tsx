@@ -142,7 +142,7 @@ export default function Navigation({ visible = true }: NavigationProps) {
                       exit={{ opacity: 0, y: -4 }}
                       transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
                     >
-                      <div className="py-2 px-5 flex flex-col gap-1">
+                      <div className="py-3 px-5 flex flex-col gap-3">
                         {explorePages.map((item) => (
                           <NavLink
                             key={item.href}
