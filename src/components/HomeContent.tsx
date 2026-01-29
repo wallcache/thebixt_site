@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import BackgroundVideo from "@/components/BackgroundVideo";
@@ -54,6 +55,7 @@ const fadeUpSlow = {
 };
 
 function LatestEpisodeCard({ episode }: { episode: Episode }) {
+  const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -188,36 +190,41 @@ function LatestEpisodeCard({ episode }: { episode: Episode }) {
             transition={{ duration: 0.4 }}
           />
 
-          {/* Two-column layout */}
-          <div className="grid md:grid-cols-[1fr,1.2fr] gap-8 md:gap-12 items-start">
+          {/* Two-column layout — entire card is clickable */}
+          <div
+            className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12"
+            onClick={() => router.push(`/episode/${episode.slug}`)}
+          >
             {/* Left — Title & meta */}
-            <div>
-              <motion.div
-                className="w-10 h-px bg-hot-pink origin-left mb-5"
-                variants={lineDraw}
-              />
-              <motion.p
-                className="text-burgundy/40 text-xs uppercase tracking-[0.2em] mb-3"
-                variants={itemFadeLeft}
-              >
-                {episode.date}
-              </motion.p>
-              <motion.h2
-                className="font-serif text-3xl md:text-4xl text-burgundy mb-2"
-                variants={itemFadeLeft}
-              >
-                {episode.title}
-              </motion.h2>
-              <motion.p
-                className="text-burgundy/55 text-base md:text-lg"
-                variants={itemFadeLeft}
-              >
-                {episode.subtitle}
-              </motion.p>
+            <div className="flex flex-col justify-between">
+              <div>
+                <motion.div
+                  className="w-10 h-px bg-hot-pink origin-left mb-5"
+                  variants={lineDraw}
+                />
+                <motion.p
+                  className="text-burgundy/40 text-xs uppercase tracking-[0.2em] mb-3"
+                  variants={itemFadeLeft}
+                >
+                  {episode.date}
+                </motion.p>
+                <motion.h2
+                  className="font-serif text-3xl md:text-4xl text-burgundy mb-2"
+                  variants={itemFadeLeft}
+                >
+                  {episode.title}
+                </motion.h2>
+                <motion.p
+                  className="text-burgundy/55 text-base md:text-lg"
+                  variants={itemFadeLeft}
+                >
+                  {episode.subtitle}
+                </motion.p>
+              </div>
             </div>
 
             {/* Right — Excerpt & CTA */}
-            <div>
+            <div className="flex flex-col justify-between">
               <motion.p
                 className="text-burgundy/50 text-base leading-relaxed mb-8"
                 variants={itemFadeUp}
@@ -225,12 +232,11 @@ function LatestEpisodeCard({ episode }: { episode: Episode }) {
                 {episode.excerpt}
               </motion.p>
               <motion.div variants={itemFadeUp}>
-                <Link
-                  href={`/episode/${episode.slug}`}
-                  className="inline-block border border-burgundy/30 text-burgundy px-8 py-3 text-sm tracking-wider uppercase hover:bg-burgundy hover:text-cream transition-all duration-300 rounded-full"
+                <span
+                  className="inline-block border border-burgundy/30 text-burgundy px-8 py-3 text-sm tracking-wider uppercase hover:bg-hot-pink hover:text-cream hover:border-hot-pink transition-all duration-300 rounded-full"
                 >
                   Read Episode &rarr;
-                </Link>
+                </span>
               </motion.div>
             </div>
           </div>
