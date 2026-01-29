@@ -112,8 +112,26 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
             <h2 className="font-serif text-xl text-hot-pink mb-6 text-center">
               Experience This Episode
             </h2>
-            <EpisodeSensesGrid senses={episode.fourSenses} />
+            <EpisodeSensesGrid senses={episode.senses} />
           </motion.div>
+
+          {/* Food for Thought */}
+          {episode.foodForThought && (
+            <motion.div
+              className="my-12 py-8 border-t border-b border-burgundy/15"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <p className="text-hot-pink text-xs uppercase tracking-[0.2em] mb-4">
+                Food for Thought
+              </p>
+              <p className="font-serif text-lg md:text-xl text-burgundy/80 italic leading-relaxed">
+                {episode.foodForThought}
+              </p>
+            </motion.div>
+          )}
 
           <motion.div
             className="prose prose-invert"
@@ -131,60 +149,6 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
               </p>
             ))}
           </motion.div>
-
-
-          {episode.recipe && (
-            <motion.section
-              className="mt-16 pt-12 border-t border-burgundy/20"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h2 className="font-serif text-2xl text-hot-pink mb-8">
-                <TypewriterText text={episode.recipe.title} wordByWord />
-              </h2>
-
-              <div className="grid md:grid-cols-2 gap-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <h3 className="text-sm uppercase tracking-wider text-burgundy/60 mb-4">
-                    Ingredients
-                  </h3>
-                  <ul className="space-y-2">
-                    {episode.recipe.ingredients.map((ingredient, index) => (
-                      <li key={index} className="text-burgundy/80">
-                        {ingredient}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1, duration: 0.4 }}
-                >
-                  <h3 className="text-sm uppercase tracking-wider text-burgundy/60 mb-4">
-                    Instructions
-                  </h3>
-                  <ol className="space-y-3">
-                    {episode.recipe.instructions.map((instruction, index) => (
-                      <li key={index} className="text-burgundy/80">
-                        <span className="font-medium text-burgundy">{index + 1}.</span>{" "}
-                        {instruction}
-                      </li>
-                    ))}
-                  </ol>
-                </motion.div>
-              </div>
-            </motion.section>
-          )}
         </article>
 
         {/* Footer */}

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -10,6 +9,7 @@ import DappledLight from "@/components/DappledLight";
 import SmokyLight from "@/components/SmokyLight";
 
 import GetSmokyButton from "@/components/GetSmokyButton";
+import EpisodeSensesGrid from "@/components/EpisodeSensesGrid";
 import { Episode } from "@/lib/episodes";
 
 interface HomeContentProps {
@@ -322,9 +322,6 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
 
   const gridEpisodes = recentEpisodes.slice(1, 5);
 
-  const senseLabels = ["See", "Hear", "Try", "Touch"] as const;
-  const senseKeys = ["see", "hear", "try", "touch"] as const;
-
   return (
     <div className="relative">
       <BackgroundVideo />
@@ -478,7 +475,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
         </motion.div>
       </section>
 
-      {/* Section 5 — Four Senses Showcase */}
+      {/* Section 5 — Senses Showcase */}
       <section className="py-24 md:py-32 px-6 relative z-10">
         <motion.div
           className="max-w-4xl mx-auto text-center mb-16"
@@ -491,58 +488,13 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
             Experience Every Episode
           </h2>
           <p className="text-burgundy/50 text-sm tracking-[0.3em] uppercase">
-            Through four senses
+            Through your senses
           </p>
         </motion.div>
 
-        <motion.div
-          className="max-w-4xl mx-auto grid grid-cols-2 gap-4 md:gap-6"
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.15 } },
-          }}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          {senseKeys.map((key, index) => {
-            const sense = latestEpisode.fourSenses[key];
-            return (
-              <motion.div
-                key={key}
-                className="relative overflow-hidden group"
-                variants={{
-                  hidden: { opacity: 0, scale: 0.95 },
-                  visible: {
-                    opacity: 1,
-                    scale: 1,
-                    transition: { duration: 0.7, ease },
-                  },
-                }}
-              >
-                <div className="aspect-[4/3] relative">
-                  <Image
-                    src={sense.image}
-                    alt={sense.caption}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute top-3 left-3 md:top-4 md:left-4">
-                    <span className="text-xs uppercase tracking-[0.2em] text-white/70">
-                      {senseLabels[index]}
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4">
-                    <p className="text-white text-sm md:text-base font-serif">
-                      {sense.caption}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+        <div className="max-w-4xl mx-auto">
+          <EpisodeSensesGrid senses={latestEpisode.senses} />
+        </div>
       </section>
 
       {/* Section 6 — Subscribe CTA */}

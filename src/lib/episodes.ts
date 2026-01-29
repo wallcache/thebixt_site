@@ -2,18 +2,12 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 
-export interface EpisodeImage {
-  src: string;
-  alt: string;
-  caption: string;
-  rotation?: number;
-}
-
-export interface FourSenses {
-  see: { image: string; caption: string };
-  hear: { image: string; caption: string };
-  try: { image: string; caption: string };
-  touch: { image: string; caption: string };
+export interface Sense {
+  type: string;
+  brand: string;
+  description: string;
+  storyReference?: string;
+  link?: string;
 }
 
 export interface Episode {
@@ -25,13 +19,8 @@ export interface Episode {
   headerImage: string;
   excerpt: string;
   content: string[];
-  fourSenses: FourSenses;
-  images?: EpisodeImage[];
-  recipe?: {
-    title: string;
-    ingredients: string[];
-    instructions: string[];
-  };
+  senses: Sense[];
+  foodForThought?: string;
 }
 
 const episodesDirectory = path.join(process.cwd(), "content/episodes");
@@ -65,9 +54,8 @@ export function getAllEpisodes(): Episode[] {
         headerImage: data.headerImage,
         excerpt: data.excerpt,
         content: paragraphs,
-        fourSenses: data.fourSenses,
-        images: data.images,
-        recipe: data.recipe,
+        senses: data.senses || [],
+        foodForThought: data.foodForThought,
       } as Episode;
     })
     .sort((a, b) => b.id - a.id); // Sort by id descending (newest first)

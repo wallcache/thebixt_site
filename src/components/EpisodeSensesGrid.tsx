@@ -1,111 +1,87 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useId } from "react";
-import { FourSenses } from "@/lib/episodes";
+import { useState } from "react";
+import { Sense } from "@/lib/episodes";
 
-interface SenseCardProps {
-  title: string;
-  subtitle: string;
-  image: string;
-  caption: string;
-}
+const senseLabels: Record<string, string> = {
+  hear: "Hear",
+  see: "See",
+  taste: "Taste",
+  grab: "Grab",
+  bonusTaste: "Bonus Taste",
+};
 
-function SenseCard({ title, subtitle, image, caption }: SenseCardProps) {
+function SenseTextCard({ sense }: { sense: Sense }) {
   const [isHovered, setIsHovered] = useState(false);
-  const maskId = useId();
 
-  return (
+  const content = (
     <motion.div
-      className="relative aspect-square overflow-hidden group cursor-pointer"
+      className="relative p-5 md:p-6 h-full"
+      style={{
+        background: "rgba(230, 226, 197, 0.04)",
+        border: "1px solid rgba(230, 226, 197, 0.1)",
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ scale: 1.01 }}
       transition={{ type: "spring", stiffness: 300, damping: 25 }}
     >
-      {/* Background Image */}
-      <motion.div
-        className="absolute inset-0"
-        animate={{ scale: isHovered ? 1.1 : 1 }}
-        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-      >
-        <img src={image} alt={title} className="w-full h-full object-cover" />
-      </motion.div>
-
-      {/* SVG with knockout text mask */}
-      <svg
-        className="absolute inset-0 w-full h-full"
-        preserveAspectRatio="xMidYMid slice"
-      >
-        <defs>
-          <mask id={maskId}>
-            <rect width="100%" height="100%" fill="white" />
-            <text
-              x="50%"
-              y="42%"
-              textAnchor="middle"
-              dominantBaseline="middle"
-              fill="black"
-              fontSize="56"
-              fontFamily="var(--font-serif), Georgia, serif"
-              fontWeight="600"
-              letterSpacing="0.05em"
-            >
-              {title}
-            </text>
-            <text
-              x="50%"
-              y="58%"
-              textAnchor="middle"
-              dominantBaseline="middle"
-              fill="black"
-              fontSize="14"
-              fontFamily="var(--font-serif), Georgia, serif"
-              fontWeight="400"
-              letterSpacing="0.15em"
-              style={{ textTransform: "uppercase" }}
-            >
-              {subtitle}
-            </text>
-          </mask>
-        </defs>
-
-        <motion.rect
-          width="100%"
-          height="100%"
-          fill="rgba(20, 20, 20, 0.85)"
-          mask={`url(#${maskId})`}
-          animate={{
-            fill: isHovered ? "rgba(20, 20, 20, 0.6)" : "rgba(20, 20, 20, 0.85)",
-          }}
-          transition={{ duration: 0.3 }}
-        />
-      </svg>
-
       {/* Hot pink border on hover */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: isHovered ? 1 : 0 }}
         transition={{ duration: 0.3 }}
-        style={{ boxShadow: "inset 0 0 0 3px var(--hot-pink)" }}
+        style={{ boxShadow: "inset 0 0 0 2px var(--hot-pink)" }}
       />
 
-      {/* Caption on hover */}
-      <motion.div
-        className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
-        transition={{ duration: 0.3 }}
-      >
-        <p className="text-cream text-sm font-serif italic">{caption}</p>
-      </motion.div>
+      {/* Sense type label */}
+      <p className="text-hot-pink text-xs uppercase tracking-[0.2em] mb-3">
+        {senseLabels[sense.type] || sense.type}
+      </p>
+
+      {/* Brand name */}
+      <h3 className="font-serif text-lg md:text-xl text-burgundy mb-2">
+        {sense.brand}
+      </h3>
+
+      {/* Story reference */}
+      {sense.storyReference && (
+        <p className="text-burgundy/40 text-sm font-serif italic mb-3">
+          &ldquo;{sense.storyReference}&rdquo;
+        </p>
+      )}
+
+      {/* Description */}
+      <p className="text-burgundy/70 text-sm leading-relaxed">
+        {sense.description}
+      </p>
+
+      {/* Link */}
+      {sense.link && (
+        <p className="mt-3">
+          <span className="text-hot-pink/70 text-xs uppercase tracking-wider hover:text-hot-pink transition-colors">
+            Explore &rarr;
+          </span>
+        </p>
+      )}
     </motion.div>
   );
+
+  if (sense.link) {
+    return (
+      <a href={sense.link} target="_blank" rel="noopener noreferrer" className="block h-full">
+        {content}
+      </a>
+    );
+  }
+
+  return content;
 }
 
 interface EpisodeSensesGridProps {
-  senses: FourSenses;
+  senses: Sense[];
   className?: string;
 }
 
@@ -115,7 +91,7 @@ export default function EpisodeSensesGrid({ senses, className = "" }: EpisodeSen
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0,
+        staggerChildren: 0.1,
         delayChildren: 0.1,
       },
     },
@@ -130,6 +106,8 @@ export default function EpisodeSensesGrid({ senses, className = "" }: EpisodeSen
     },
   };
 
+  const isOddCount = senses.length % 2 !== 0;
+
   return (
     <motion.section
       className={`w-full ${className}`}
@@ -139,41 +117,21 @@ export default function EpisodeSensesGrid({ senses, className = "" }: EpisodeSen
       variants={containerVariants}
     >
       <motion.div
-        className="grid grid-cols-2 gap-2 md:gap-4"
+        className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4"
         variants={containerVariants}
       >
-        <motion.div variants={itemVariants}>
-          <SenseCard
-            title="See"
-            subtitle="Eyes"
-            image={senses.see.image}
-            caption={senses.see.caption}
-          />
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <SenseCard
-            title="Hear"
-            subtitle="Ears"
-            image={senses.hear.image}
-            caption={senses.hear.caption}
-          />
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <SenseCard
-            title="Try"
-            subtitle="Mouth"
-            image={senses.try.image}
-            caption={senses.try.caption}
-          />
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <SenseCard
-            title="Touch"
-            subtitle="Hands"
-            image={senses.touch.image}
-            caption={senses.touch.caption}
-          />
-        </motion.div>
+        {senses.map((sense, index) => {
+          const isLastOdd = isOddCount && index === senses.length - 1;
+          return (
+            <motion.div
+              key={`${sense.type}-${index}`}
+              variants={itemVariants}
+              className={isLastOdd ? "md:col-span-2 md:max-w-[50%] md:mx-auto" : ""}
+            >
+              <SenseTextCard sense={sense} />
+            </motion.div>
+          );
+        })}
       </motion.div>
     </motion.section>
   );
