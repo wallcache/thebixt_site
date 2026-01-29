@@ -90,7 +90,7 @@ export default function Navigation({ visible = true }: NavigationProps) {
               >
                 <motion.span
                   className="absolute inset-0"
-                  style={{ backgroundColor: "#081E28" }}
+                  style={{ backgroundColor: "#FD05A0" }}
                   initial={{ scale: 0, borderRadius: "100%" }}
                   animate={{
                     scale: isButtonHovered ? 1.5 : 0,
@@ -100,7 +100,7 @@ export default function Navigation({ visible = true }: NavigationProps) {
                 />
                 <motion.span
                   className="relative z-10"
-                  animate={{ color: isButtonHovered ? "#E6E2C5" : "#081E28" }}
+                  animate={{ color: isButtonHovered ? "#081E28" : "#081E28" }}
                   transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                 >
                   Get Smoky
