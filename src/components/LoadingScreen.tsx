@@ -7,17 +7,32 @@ interface LoadingScreenProps {
   onLoadingComplete: () => void;
 }
 
+const LETTERS = ["S", "m", "o", "k", "y"];
+const STAGGER_DELAY = 0.12;
+const LETTER_DURATION = 0.4;
+// Total time for all letters + period to appear
+const ALL_IN_TIME =
+  LETTERS.length * STAGGER_DELAY * 1000 + // last letter starts
+  0.15 * 1000 + // period extra delay
+  LETTER_DURATION * 1000; // animation duration of last element
+const HOLD_TIME = 600;
+
 export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
-  const [phase, setPhase] = useState<"in" | "hold" | "out">("in");
+  const [exiting, setExiting] = useState(false);
 
   useEffect(() => {
-    const holdTimer = setTimeout(() => setPhase("hold"), 600);
-    const outTimer = setTimeout(() => setPhase("out"), 1200);
-    const doneTimer = setTimeout(() => onLoadingComplete(), 1700);
+    // After all letters are in + hold time, begin exit
+    const exitTimer = setTimeout(() => {
+      setExiting(true);
+    }, ALL_IN_TIME + HOLD_TIME);
+
+    // After exit animation completes, notify parent
+    const doneTimer = setTimeout(() => {
+      onLoadingComplete();
+    }, ALL_IN_TIME + HOLD_TIME + 400);
 
     return () => {
-      clearTimeout(holdTimer);
-      clearTimeout(outTimer);
+      clearTimeout(exitTimer);
       clearTimeout(doneTimer);
     };
   }, [onLoadingComplete]);
@@ -27,32 +42,40 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
       className="absolute inset-0 flex items-center justify-center"
       style={{ backgroundColor: "#081E28" }}
     >
-      <motion.div
-        className="flex flex-col items-center"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={
-          phase === "out"
-            ? { opacity: 0, scale: 1.05 }
-            : { opacity: 1, scale: 1 }
-        }
-        transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+      <motion.h1
+        className="font-serif text-7xl md:text-9xl text-burgundy tracking-tight whitespace-nowrap"
+        animate={exiting ? { opacity: 0 } : { opacity: 1 }}
+        transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
       >
-        <h1 className="font-serif text-5xl md:text-7xl text-burgundy tracking-tight">
-          Smoky<span className="text-hot-pink">.</span>
-        </h1>
-        <motion.p
-          className="text-burgundy/40 text-xs tracking-[0.3em] uppercase mt-4"
-          initial={{ opacity: 0, y: 8 }}
-          animate={
-            phase === "out"
-              ? { opacity: 0, y: -4 }
-              : { opacity: 1, y: 0 }
-          }
-          transition={{ duration: 0.4, delay: phase === "in" ? 0.3 : 0, ease: [0.4, 0, 0.2, 1] }}
+        {LETTERS.map((letter, i) => (
+          <motion.span
+            key={i}
+            className="inline-block"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: LETTER_DURATION,
+              delay: i * STAGGER_DELAY,
+              ease: [0.4, 0, 0.2, 1],
+            }}
+          >
+            {letter}
+          </motion.span>
+        ))}
+        {/* Pink period appears last */}
+        <motion.span
+          className="inline-block text-hot-pink"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: LETTER_DURATION,
+            delay: LETTERS.length * STAGGER_DELAY + 0.15,
+            ease: [0.4, 0, 0.2, 1],
+          }}
         >
-          Rituals, Reality, and Recipes
-        </motion.p>
-      </motion.div>
+          .
+        </motion.span>
+      </motion.h1>
     </div>
   );
 }

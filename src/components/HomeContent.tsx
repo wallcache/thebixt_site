@@ -60,12 +60,11 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
     offset: ["start start", "end start"],
   });
 
-  // Scale: starts huge (8x), zooms down to 1x over the scroll
-  const heroScale = useTransform(heroProgress, [0, 0.8], [8, 1]);
-  // Opacity of the tagline — fades in at end of zoom
-  const taglineOpacity = useTransform(heroProgress, [0.7, 0.9], [0, 1]);
-  // Chevron opacity — visible only after zoom settles
-  const chevronOpacity = useTransform(heroProgress, [0.85, 0.95], [0, 1]);
+  // Zoom IN: starts at 1x, scales up to 50x over the scroll
+  const heroScale = useTransform(heroProgress, [0, 0.7], [1, 50]);
+  // Text fades out as it zooms past the viewer
+  const textOpacity = useTransform(heroProgress, [0.3, 0.6], [1, 0]);
+
   const gridEpisodes = recentEpisodes.slice(1, 5);
 
   const senseLabels = ["See", "Hear", "Try", "Touch"] as const;
@@ -79,42 +78,20 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
       {/* Tall scroll container to give room for the zoom animation */}
       <div ref={heroRef} className="relative z-10" style={{ height: "300vh" }}>
         {/* Sticky wrapper — keeps the logo centered on screen during scroll */}
-        <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
           <motion.div
-            className="flex flex-col items-center"
-            style={{ scale: heroScale }}
+            className="flex items-center justify-center"
+            style={{
+              scale: heroScale,
+              opacity: textOpacity,
+              // Transform-origin centered on the O (3rd of 6 chars including period)
+              // O is roughly at 40% from the left of the text
+              transformOrigin: "42% 50%",
+            }}
           >
             <h1 className="font-serif text-7xl md:text-9xl text-burgundy tracking-tight whitespace-nowrap">
               Smoky<span className="text-hot-pink">.</span>
             </h1>
-          </motion.div>
-
-          {/* Tagline — fades in after zoom completes */}
-          <motion.p
-            className="text-burgundy/50 text-sm tracking-[0.3em] uppercase mt-6"
-            style={{ opacity: taglineOpacity }}
-          >
-            Rituals, Reality, and Recipes
-          </motion.p>
-
-          {/* Scroll indicator — appears after zoom settles */}
-          <motion.div
-            className="absolute bottom-10"
-            style={{ opacity: chevronOpacity }}
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="text-burgundy/40"
-            >
-              <path d="M6 9l6 6 6-6" />
-            </svg>
           </motion.div>
         </div>
       </div>

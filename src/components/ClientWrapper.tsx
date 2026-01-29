@@ -21,25 +21,15 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
     <>
       <WaterRipple />
 
-      {/* Loading screen */}
-      <AnimatePresence>
-        {isLoading && (
-          <motion.div
-            initial={{ opacity: 1, pointerEvents: "auto" as const }}
-            exit={{ opacity: 0, pointerEvents: "none" as const }}
-            transition={{ duration: 0.5 }}
-            className="fixed inset-0 z-50"
-          >
-            <LoadingScreen onLoadingComplete={handleLoadingComplete} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Main content */}
-      <div
-        className={`transition-opacity duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
-      >
-        <Navigation />
+      {/* Main content — always rendered so the hero is in place behind the loading screen */}
+      <div>
+        {/* Hide nav during loading so it doesn't peek through */}
+        <div
+          className="transition-opacity duration-500"
+          style={{ opacity: isLoading ? 0 : 1 }}
+        >
+          <Navigation />
+        </div>
         <main
           className={`min-h-screen relative ${isHome ? "" : "pt-20"}`}
           style={{ zIndex: 10 }}
@@ -49,6 +39,21 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
           </AnimatePresence>
         </main>
       </div>
+
+      {/* Loading screen — overlays on top, fades out to reveal hero already in position */}
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+            className="fixed inset-0 z-50"
+            style={{ pointerEvents: isLoading ? "auto" : "none" }}
+          >
+            <LoadingScreen onLoadingComplete={handleLoadingComplete} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
