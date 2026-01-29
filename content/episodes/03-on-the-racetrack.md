@@ -12,6 +12,7 @@ senses:
     brand: "Co-Op Mojito Flavoured Grapes"
     description: "Remember last year's cotton candy grapes? Well this year have the cocktail without the alcohol... if you can get your hands on them!"
     storyReference: "The Girls were still walking around the gallery drinking mojitos"
+    link: "https://www.coop.co.uk/"
   - type: "see"
     brand: "Formula E Finale"
     description: "Formula E finale races around ExCeL London on 26-27 July."

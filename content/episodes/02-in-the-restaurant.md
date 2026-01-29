@@ -17,6 +17,7 @@ senses:
     brand: "M&S Clear Ingredient Range"
     description: "Checking your ingredients is the new IT thing — so much so that M&S has made it easier with their packaging. There's no hiding here. M&S can keep up with the times."
     storyReference: "Checking ingredients"
+    link: "https://www.marksandspencer.com/food/content/only-ingredients-range"
   - type: "grab"
     brand: "KOI Footwear"
     description: "Independent British brand born in Manchester, founded in 2016. From classic Mary Janes to iconic platform boots. Designs are bold with edge, attitude, and roots in the city."
