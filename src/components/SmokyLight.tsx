@@ -11,7 +11,7 @@ const vertexShader = `
   }
 `;
 
-// Volumetric god rays through smoke — fBM noise haze with radial light shafts
+// Domain-warped smoke — large organic shapes that fold and rotate, light through trees
 const fragmentShader = `
   precision highp float;
 
@@ -22,106 +22,109 @@ const fragmentShader = `
 
   varying vec2 vUv;
 
-  // Hash for noise
+  // 2D rotation matrix
+  mat2 rot(float a) {
+    float s = sin(a), c = cos(a);
+    return mat2(c, -s, s, c);
+  }
+
   float hash(vec2 p) {
     return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
   }
 
-  // Smooth value noise
   float noise(vec2 p) {
     vec2 i = floor(p);
     vec2 f = fract(p);
     f = f * f * (3.0 - 2.0 * f);
-
     float a = hash(i);
     float b = hash(i + vec2(1.0, 0.0));
     float c = hash(i + vec2(0.0, 1.0));
     float d = hash(i + vec2(1.0, 1.0));
-
     return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
   }
 
-  // Fractal Brownian Motion — 5 octaves for rich organic smoke
+  // fBM with rotation per octave — produces folding, turbulent shapes
   float fbm(vec2 p) {
     float value = 0.0;
-    float amplitude = 0.5;
-    float frequency = 1.0;
+    float amp = 0.5;
     for (int i = 0; i < 5; i++) {
-      value += amplitude * noise(p * frequency);
-      frequency *= 2.0;
-      amplitude *= 0.5;
+      value += amp * noise(p);
+      p = rot(0.75) * p * 2.0 + vec2(1.7, 9.2);
+      amp *= 0.5;
     }
     return value;
   }
 
   void main() {
     vec2 uv = vUv;
-    vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
-    vec2 uvAspect = uv * aspect;
+    float ar = uResolution.x / uResolution.y;
+    vec2 p = vec2((uv.x - 0.5) * ar, uv.y - 0.5);
 
     float t = uTime;
 
-    // Light source position — upper center, partially tracks mouse
-    vec2 lightPos = vec2(0.5 * aspect.x, 0.85);
-    vec2 mouseNorm = uMouse * aspect;
-    lightPos += (mouseNorm - lightPos) * 0.3 * uMouseInfluence;
+    // Mouse in same coordinate space
+    vec2 mouse = vec2((uMouse.x - 0.5) * ar, uMouse.y - 0.5);
 
-    // Vector from pixel to light
-    vec2 toLight = lightPos - uvAspect;
-    float distToLight = length(toLight);
-    float angle = atan(toLight.y, toLight.x);
+    // --- Domain warping (Inigo Quilez style) ---
+    // Each warp layer feeds into the next, creating organic folding motion.
+    // Mouse displaces the domain — moving the mouse stirs and rotates the smoke.
 
-    // --- God rays ---
-    // Angular noise breaks beams into irregular shafts
-    float rayNoise = fbm(vec2(angle * 3.0, t * 0.15));
-    float rays = smoothstep(0.35, 0.7, rayNoise);
-    // Rays fade with distance from source
-    float rayFalloff = exp(-distToLight * 1.2);
-    rays *= rayFalloff;
+    // Base coordinates — large scale, slow drift
+    vec2 q = p * 1.2;
+    q += mouse * uMouseInfluence * 0.4;                    // mouse shifts the whole field
+    q += vec2(t * 0.03, t * 0.02);                         // slow drift
 
-    // Additional angular variation for shaft width
-    float shaftDetail = noise(vec2(angle * 8.0 + t * 0.1, distToLight * 2.0));
-    rays *= smoothstep(0.3, 0.6, shaftDetail);
+    // First warp — large shapes
+    float n1 = fbm(q);
+    vec2 warp1 = vec2(n1, fbm(q + vec2(5.2, 1.3)));
 
-    // --- Smoke / haze (fBM) ---
-    vec2 smokeUV = uvAspect * 2.0;
-    // Slow drift
-    smokeUV += vec2(t * 0.04, t * 0.02);
+    // Mouse rotation — cursor angle rotates the warp field
+    float mouseAngle = atan(mouse.y, mouse.x + 0.001);
+    float mouseDist = length(mouse);
+    warp1 = rot(mouseAngle * 0.3 * uMouseInfluence) * warp1;
 
-    // Mouse parts the smoke — push smoke coords away from cursor
-    vec2 mouseDelta = uvAspect - mouseNorm;
-    float mouseDist = length(mouseDelta);
-    float mouseRepel = smoothstep(0.4, 0.0, mouseDist) * uMouseInfluence * 0.6;
-    smokeUV += normalize(mouseDelta + 0.001) * mouseRepel;
+    // Second warp — feeds first warp output back in, creating folding
+    vec2 r = q + warp1 * 1.6 + vec2(t * 0.04, -t * 0.03);
+    r += mouse * uMouseInfluence * 0.25;                   // mouse stirs deeper layer too
+    float n2 = fbm(r);
+    vec2 warp2 = vec2(n2, fbm(r + vec2(8.3, 2.8)));
 
-    float smoke = fbm(smokeUV);
-    // Second layer at different scale for depth
-    float smoke2 = fbm(smokeUV * 1.8 + vec2(5.2, 3.7) + t * 0.03);
-    smoke = smoke * 0.6 + smoke2 * 0.4;
+    // Third warp — even more folding
+    vec2 s = q + warp2 * 1.4 + vec2(-t * 0.02, t * 0.05);
+    float n3 = fbm(s);
 
-    // Smoke density — creates gaps and thick patches
-    float smokeDensity = smoothstep(0.25, 0.65, smoke);
+    // --- Combine into smoke/light pattern ---
 
-    // --- Combine: light through smoke ---
-    // Light is visible where rays exist AND smoke is thin (or at edges of smoke)
-    float lightThrough = rays * (1.0 - smokeDensity * 0.7);
+    // Folded smoke density — the triple domain-warp creates organic turbulence
+    float smoke = n3;
 
-    // Ambient haze glow near light source
-    float haze = exp(-distToLight * 0.8) * 0.3;
-    haze *= smokeDensity;
+    // Light through gaps — bright where smoke is thin
+    float lightThrough = smoothstep(0.55, 0.3, smoke);
 
-    // Mouse proximity brightens nearby area subtly
-    float mouseGlow = smoothstep(0.35, 0.0, mouseDist) * uMouseInfluence * 0.15;
+    // Darker thick regions
+    float shadow = smoothstep(0.3, 0.6, smoke) * 0.4;
 
-    float intensity = lightThrough + haze + mouseGlow;
+    // Edge glow where light meets shadow (like light catching smoke edges)
+    float edgeGlow = smoothstep(0.0, 0.08, abs(smoke - 0.42)) ;
+    edgeGlow = 1.0 - edgeGlow;
+    edgeGlow *= 0.3;
 
-    // Warm cream/amber color
-    vec3 lightColor = vec3(0.95, 0.88, 0.65);
-    // Slightly cooler at edges
-    vec3 edgeColor = vec3(0.7, 0.75, 0.82);
-    vec3 color = mix(edgeColor, lightColor, rayFalloff);
+    // Mouse proximity — subtle brightening near cursor
+    float pMouseDist = length(p - mouse);
+    float mouseGlow = smoothstep(0.5, 0.0, pMouseDist) * uMouseInfluence * 0.12;
 
-    float alpha = clamp(intensity * 0.85, 0.0, 1.0);
+    // Final intensity — dim and smoky
+    float intensity = lightThrough * 0.22 + edgeGlow + mouseGlow;
+    intensity -= shadow * 0.15;
+    intensity = clamp(intensity, 0.0, 1.0);
+
+    // Warm cream/amber palette
+    vec3 warmLight = vec3(0.95, 0.88, 0.65);
+    vec3 coolHaze = vec3(0.55, 0.6, 0.65);
+    // Mix based on how much "light" vs "shadow" at this pixel
+    vec3 color = mix(coolHaze, warmLight, lightThrough);
+
+    float alpha = intensity * 0.7;
     gl_FragColor = vec4(color * alpha, alpha);
   }
 `;
