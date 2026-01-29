@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { Episode } from "@/lib/episodes";
 import TypewriterText from "./TypewriterText";
@@ -15,40 +14,10 @@ interface EpisodeContentProps {
 }
 
 export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentProps) {
-  const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const currentIndex = allEpisodes.findIndex((ep) => ep.id === episode.id);
   const nextEpisode = currentIndex > 0 ? allEpisodes[currentIndex - 1] : null;
   const prevEpisode = currentIndex < allEpisodes.length - 1 ? allEpisodes[currentIndex + 1] : null;
-
-  // Vertical scroll navigation - when scrolling up at bottom, go to next episode
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
-    let scrollTimeout: NodeJS.Timeout;
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      const isAtBottom = currentScrollY + windowHeight >= documentHeight - 100;
-
-      // If at bottom and scrolling down, navigate to prev episode (older)
-      if (isAtBottom && currentScrollY > lastScrollY && prevEpisode) {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-          router.push(`/episode/${prevEpisode.slug}`);
-        }, 300);
-      }
-
-      lastScrollY = currentScrollY;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      clearTimeout(scrollTimeout);
-    };
-  }, [prevEpisode, router]);
 
   return (
     <div className="relative">
@@ -181,25 +150,6 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
               )}
             </div>
           </div>
-
-          {/* Scroll hint for next episode */}
-          {prevEpisode && (
-            <motion.div
-              className="text-center py-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1 }}
-            >
-              <p className="text-burgundy/30 text-sm mb-2">Scroll down for next episode</p>
-              <motion.div
-                className="text-burgundy/40 text-2xl"
-                animate={{ y: [0, 8, 0] }}
-                transition={{ repeat: Infinity, duration: 1.5 }}
-              >
-                &darr;
-              </motion.div>
-            </motion.div>
-          )}
 
           {/* Bottom */}
           <div className="text-center pt-8 pb-4 border-t border-burgundy/10">
