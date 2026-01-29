@@ -90,18 +90,24 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
             </p>
           </header>
 
-          {/* Brief description / excerpt */}
-          <motion.p
-            className="text-burgundy/90 text-lg leading-relaxed mb-12 font-serif italic"
+          <motion.div
+            className="prose prose-invert mb-16"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            {episode.excerpt}
-          </motion.p>
+            {episode.content.map((paragraph, index) => (
+              <p
+                key={index}
+                className="text-burgundy/80 leading-relaxed mb-6"
+              >
+                {paragraph}
+              </p>
+            ))}
+          </motion.div>
 
-          {/* Four Senses Grid */}
+          {/* Senses Grid */}
           <motion.div
             className="mb-16"
             initial={{ opacity: 0 }}
@@ -132,23 +138,6 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
               </p>
             </motion.div>
           )}
-
-          <motion.div
-            className="prose prose-invert"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            {episode.content.map((paragraph, index) => (
-              <p
-                key={index}
-                className="text-burgundy/80 leading-relaxed mb-6"
-              >
-                {paragraph}
-              </p>
-            ))}
-          </motion.div>
         </article>
 
         {/* Footer */}

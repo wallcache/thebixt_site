@@ -2,7 +2,7 @@
 id: 2
 slug: "in-the-restaurant"
 title: "In The Restaurant"
-subtitle: "Rituals, Reality, and Recipes"
+subtitle: "Bucatini, Mary Janes & the Dessert Menu Escape"
 date: "6th July"
 headerImage: "/content/imgs/dec_fair.jpg"
 excerpt: "G was sitting across from Archie and a plate of bucatini all'Amatriciana when her boyfriend chose to continually dodge her question."

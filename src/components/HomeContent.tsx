@@ -418,7 +418,29 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
         <LatestEpisodeCard episode={latestEpisode} />
       </section>
 
-      {/* Section 4 — Recent Episodes Grid */}
+      {/* Section 4 — Senses Showcase */}
+      <section className="py-24 md:py-32 px-6 relative z-10">
+        <motion.div
+          className="max-w-4xl mx-auto text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease }}
+        >
+          <h2 className="font-serif text-3xl md:text-5xl text-burgundy mb-4">
+            Experience Every Episode
+          </h2>
+          <p className="text-burgundy/50 text-sm tracking-[0.3em] uppercase">
+            Through your senses
+          </p>
+        </motion.div>
+
+        <div className="max-w-4xl mx-auto">
+          <EpisodeSensesGrid senses={latestEpisode.senses} />
+        </div>
+      </section>
+
+      {/* Section 5 — Recent Episodes Grid */}
       <section className="py-24 md:py-32 px-6 relative z-10">
         <motion.div
           className="max-w-4xl mx-auto"
@@ -473,28 +495,6 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
             View All Episodes &rarr;
           </Link>
         </motion.div>
-      </section>
-
-      {/* Section 5 — Senses Showcase */}
-      <section className="py-24 md:py-32 px-6 relative z-10">
-        <motion.div
-          className="max-w-4xl mx-auto text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease }}
-        >
-          <h2 className="font-serif text-3xl md:text-5xl text-burgundy mb-4">
-            Experience Every Episode
-          </h2>
-          <p className="text-burgundy/50 text-sm tracking-[0.3em] uppercase">
-            Through your senses
-          </p>
-        </motion.div>
-
-        <div className="max-w-4xl mx-auto">
-          <EpisodeSensesGrid senses={latestEpisode.senses} />
-        </div>
       </section>
 
       {/* Section 6 — Subscribe CTA */}
