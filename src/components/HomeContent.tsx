@@ -6,7 +6,7 @@ import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import BackgroundVideo from "@/components/BackgroundVideo";
 import DappledLight from "@/components/DappledLight";
-import TapedPhoto from "@/components/TapedPhoto";
+
 import GetSmokyButton from "@/components/GetSmokyButton";
 import { Episode } from "@/lib/episodes";
 
@@ -179,51 +179,33 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
 
       {/* Section 3 — Latest Episode Feature */}
       <section className="py-24 md:py-32 px-6 relative z-10">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-16">
-          <motion.div
-            className="flex-shrink-0"
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease }}
+        <motion.div
+          className="max-w-2xl mx-auto text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease }}
+        >
+          <div className="w-12 h-px bg-hot-pink mb-6 mx-auto" />
+          <p className="text-burgundy/40 text-xs uppercase tracking-[0.2em] mb-4">
+            {latestEpisode.date}
+          </p>
+          <h2 className="font-serif text-3xl md:text-5xl text-burgundy mb-3">
+            {latestEpisode.title}
+          </h2>
+          <p className="text-burgundy/60 text-lg mb-6">
+            {latestEpisode.subtitle}
+          </p>
+          <p className="text-burgundy/50 text-base leading-relaxed mb-8">
+            {latestEpisode.excerpt}
+          </p>
+          <Link
+            href={`/episode/${latestEpisode.slug}`}
+            className="inline-block border border-burgundy/30 text-burgundy px-8 py-3 text-sm tracking-wider uppercase hover:bg-burgundy hover:text-cream transition-all duration-300"
           >
-            <TapedPhoto
-              src={latestEpisode.headerImage}
-              alt={latestEpisode.title}
-              caption={latestEpisode.date}
-              rotation={-2}
-              size="large"
-            />
-          </motion.div>
-
-          <motion.div
-            className="flex-1 text-center md:text-left"
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease }}
-          >
-            <div className="w-12 h-px bg-hot-pink mb-6 mx-auto md:mx-0" />
-            <p className="text-burgundy/40 text-xs uppercase tracking-[0.2em] mb-4">
-              {latestEpisode.date}
-            </p>
-            <h2 className="font-serif text-3xl md:text-5xl text-burgundy mb-3">
-              {latestEpisode.title}
-            </h2>
-            <p className="text-burgundy/60 text-lg mb-6">
-              {latestEpisode.subtitle}
-            </p>
-            <p className="text-burgundy/50 text-base leading-relaxed mb-8">
-              {latestEpisode.excerpt}
-            </p>
-            <Link
-              href={`/episode/${latestEpisode.slug}`}
-              className="inline-block border border-burgundy/30 text-burgundy px-8 py-3 text-sm tracking-wider uppercase hover:bg-burgundy hover:text-cream transition-all duration-300"
-            >
-              Read Episode &rarr;
-            </Link>
-          </motion.div>
-        </div>
+            Read Episode &rarr;
+          </Link>
+        </motion.div>
       </section>
 
       {/* Section 4 — Recent Episodes Grid */}

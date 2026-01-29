@@ -113,6 +113,7 @@ export default function DappledLight({
   const mouseRef = useRef({ x: 0.5, y: 0.5 });
   const targetMouseRef = useRef({ x: 0.5, y: 0.5 });
 
+  // Track mouse on window so the effect works even when hovering elements above (e.g. nav)
   const handleMouseMove = useCallback((e: MouseEvent) => {
     const rect = containerRef.current?.getBoundingClientRect();
     if (rect) {
@@ -121,10 +122,6 @@ export default function DappledLight({
         y: 1.0 - (e.clientY - rect.top) / rect.height,
       };
     }
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    targetMouseRef.current = { x: -1, y: -1 };
   }, []);
 
   useEffect(() => {
@@ -182,8 +179,8 @@ export default function DappledLight({
 
     animate();
 
-    container.addEventListener("mousemove", handleMouseMove);
-    container.addEventListener("mouseleave", handleMouseLeave);
+    // Listen on window so the effect tracks the mouse even over elements above (nav, etc.)
+    window.addEventListener("mousemove", handleMouseMove);
 
     const handleResize = () => {
       const w = container.clientWidth;
@@ -197,8 +194,7 @@ export default function DappledLight({
 
     return () => {
       cancelAnimationFrame(frameRef.current);
-      container.removeEventListener("mousemove", handleMouseMove);
-      container.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("mousemove", handleMouseMove);
       resizeObserver.disconnect();
       geometry.dispose();
       material.dispose();
@@ -207,7 +203,7 @@ export default function DappledLight({
         container.removeChild(renderer.domElement);
       }
     };
-  }, [speed, mouseInfluence, handleMouseMove, handleMouseLeave]);
+  }, [speed, mouseInfluence, handleMouseMove]);
 
   return (
     <div
