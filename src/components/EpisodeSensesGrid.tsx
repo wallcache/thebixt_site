@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sense } from "@/lib/episodes";
 
 const senseLabels: Record<string, string> = {
@@ -72,9 +72,36 @@ interface EpisodeSensesGridProps {
   centerButtonHref?: string;
 }
 
-const cutoutClasses = ["cutout-br", "cutout-bl", "cutout-tr", "cutout-tl"];
+// Inline mask styles for circular cutouts — more reliable than class-based masks in production
+const cutoutStyles: Record<number, React.CSSProperties> = {
+  0: { // bottom-right corner
+    WebkitMaskImage: "radial-gradient(circle at calc(100% + 8px) calc(100% + 8px), transparent 76px, black 76px)",
+    maskImage: "radial-gradient(circle at calc(100% + 8px) calc(100% + 8px), transparent 76px, black 76px)",
+  },
+  1: { // bottom-left corner
+    WebkitMaskImage: "radial-gradient(circle at calc(0% - 8px) calc(100% + 8px), transparent 76px, black 76px)",
+    maskImage: "radial-gradient(circle at calc(0% - 8px) calc(100% + 8px), transparent 76px, black 76px)",
+  },
+  2: { // top-right corner
+    WebkitMaskImage: "radial-gradient(circle at calc(100% + 8px) calc(0% - 8px), transparent 76px, black 76px)",
+    maskImage: "radial-gradient(circle at calc(100% + 8px) calc(0% - 8px), transparent 76px, black 76px)",
+  },
+  3: { // top-left corner
+    WebkitMaskImage: "radial-gradient(circle at calc(0% - 8px) calc(0% - 8px), transparent 76px, black 76px)",
+    maskImage: "radial-gradient(circle at calc(0% - 8px) calc(0% - 8px), transparent 76px, black 76px)",
+  },
+};
 
 export default function EpisodeSensesGrid({ senses, className = "", centerButtonHref }: EpisodeSensesGridProps) {
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    setIsDesktop(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -113,12 +140,13 @@ export default function EpisodeSensesGrid({ senses, className = "", centerButton
         >
           {senses.map((sense, index) => {
             const isLastOdd = isOddCount && index === senses.length - 1;
-            const cutout = showCenterButton && index < 4 ? cutoutClasses[index] : "";
+            const cutoutStyle = showCenterButton && isDesktop && index < 4 ? cutoutStyles[index] : undefined;
             return (
               <motion.div
                 key={`${sense.type}-${index}`}
                 variants={itemVariants}
-                className={`${isLastOdd ? "md:col-span-2 md:max-w-[50%] md:mx-auto" : ""} ${cutout}`}
+                className={isLastOdd ? "md:col-span-2 md:max-w-[50%] md:mx-auto" : ""}
+                style={cutoutStyle}
               >
                 <SenseTextCard sense={sense} />
               </motion.div>

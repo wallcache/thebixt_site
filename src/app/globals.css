@@ -130,6 +130,7 @@ html {
   background-clip: text;
 }
 
+
 @keyframes loadingBar {
   0% {
     width: 0%;

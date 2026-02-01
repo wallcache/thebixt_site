@@ -363,7 +363,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
       <BackgroundVideo />
 
       {/* Section 1 — Hero with zoom-through-O portal */}
-      <div ref={heroRef} className="relative z-10" style={{ height: "300vh" }}>
+      <div ref={heroRef} className="relative z-10" style={{ height: "200vh" }}>
         <motion.div
           className="sticky top-0 h-screen overflow-hidden"
           style={{ backgroundColor: heroBg }}
@@ -450,9 +450,9 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
       </motion.div>
 
       {/* Section 3 — Senses Showcase */}
-      <section className="py-24 md:py-32 px-6 relative z-10">
+      <section className="py-12 md:py-16 px-6 relative z-10">
         <motion.div
-          className="max-w-4xl mx-auto text-center mb-16"
+          className="max-w-4xl mx-auto text-center mb-10"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -472,7 +472,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
       </section>
 
       {/* Section 3b — CTA Buttons */}
-      <section className="pb-24 md:pb-32 px-6 relative z-10">
+      <section className="pb-12 md:pb-16 px-6 relative z-10">
         <motion.div
           className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-5"
           initial={{ opacity: 0, y: 30 }}
@@ -499,12 +499,12 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
       </section>
 
       {/* Section 4 — Latest Episode Feature (Liquid Glass Card) */}
-      <section className="py-24 md:py-32 px-6 relative z-10">
+      <section className="py-12 md:py-20 px-6 relative z-10">
         <LatestEpisodeCard episode={latestEpisode} />
       </section>
 
       {/* Section 5 — Recent Episodes Grid */}
-      <section className="py-24 md:py-32 px-6 relative z-10">
+      <section className="py-12 md:py-20 px-6 relative z-10">
         <motion.div
           className="max-w-4xl mx-auto"
           initial={{ opacity: 0, y: 30 }}
@@ -561,7 +561,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
       </section>
 
       {/* Section 6 — Subscribe CTA */}
-      <section className="py-32 md:py-40 px-6 relative z-10">
+      <section className="py-16 md:py-24 px-6 relative z-10">
         <motion.div
           className="flex flex-col items-center text-center"
           initial={{ opacity: 0, y: 30 }}
