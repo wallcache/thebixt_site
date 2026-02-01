@@ -30,11 +30,11 @@ export default function AboutContent() {
             transition={{ duration: 0.5 }}
           >
             <p className="text-burgundy text-xl md:text-2xl leading-relaxed mb-8">
-              Enter <em className="font-serif">How To Make A Sandwich Smoky</em>, our newsletter where escapism meets realism. Through the fictional world of <em className="font-serif">The Silver Spooners</em> – a best friend group navigating love, life, and London – we invite you to fall back in love with your own story.
+              Enter <em className="font-serif">Smoky</em>, a newsletter where the story is fictional but the taste is real. Follow <em className="font-serif">The Silver Spooners</em>, a group of friends navigating love, life, and London, and steal their world. Every episode comes with real places, real brands, and real things to try, see, grab, and hear.
             </p>
 
             <p className="text-burgundy/80 text-lg tracking-wide">
-              Rituals. Reality. Recipes. All delivered to your senses.
+              Delivered to your senses.
             </p>
           </motion.div>
 
@@ -95,7 +95,7 @@ export default function AboutContent() {
           </h2>
           <GetSmokyButton variant="dark" />
           <p className="text-burgundy/30 text-xs tracking-[0.2em] uppercase mt-16">
-            &copy; 2025 The Bixt &middot; Rituals, Reality, and Recipes
+            &copy; 2025 The Bixt
           </p>
         </motion.div>
       </footer>

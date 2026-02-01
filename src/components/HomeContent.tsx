@@ -11,6 +11,7 @@ import SmokyLight from "@/components/SmokyLight";
 import GetSmokyButton from "@/components/GetSmokyButton";
 import EpisodeSensesGrid from "@/components/EpisodeSensesGrid";
 import { Episode } from "@/lib/episodes";
+import { siteConfig } from "@/data";
 
 interface HomeContentProps {
   latestEpisode: Episode;
@@ -55,6 +56,95 @@ const fadeUpSlow = {
   },
 };
 
+function MagneticCTA({
+  href,
+  external,
+  variant = "pink",
+  children,
+}: {
+  href: string;
+  external?: boolean;
+  variant?: "pink" | "cream";
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [hovered, setHovered] = useState(false);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const dx = e.clientX - (rect.left + rect.width / 2);
+    const dy = e.clientY - (rect.top + rect.height / 2);
+    setPos({ x: dx * 0.3, y: dy * 0.3 });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setPos({ x: 0, y: 0 });
+    setHovered(false);
+  }, []);
+
+  const isPink = variant === "pink";
+  const linkProps = external
+    ? { href, target: "_blank" as const, rel: "noopener noreferrer" }
+    : { href };
+
+  const glowColor = isPink ? "rgba(253, 5, 160," : "rgba(230, 226, 197,";
+  const fillColor = isPink ? "#FD05A0" : "#E6E2C5";
+
+  return (
+    <motion.a
+      ref={ref}
+      {...linkProps}
+      className={`relative inline-block px-12 py-5 text-lg tracking-widest font-medium rounded-full border ${
+        isPink
+          ? "border-hot-pink/60 text-burgundy"
+          : "border-burgundy/30 text-burgundy"
+      }`}
+      style={{ backgroundColor: "transparent" }}
+      animate={{
+        x: pos.x,
+        y: pos.y,
+        scale: hovered ? 1.1 : 1,
+        color: hovered
+          ? isPink ? "#E6E2C5" : "#081E28"
+          : undefined,
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 150,
+        damping: 15,
+        mass: 0.1,
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Glow */}
+      <motion.div
+        className="absolute inset-0 rounded-full -z-10"
+        animate={{
+          boxShadow: hovered
+            ? `0 0 30px 8px ${glowColor}0.5), 0 0 60px 20px ${glowColor}0.2)`
+            : `0 0 15px 4px ${glowColor}0.25), 0 0 30px 10px ${glowColor}0.08)`,
+        }}
+        transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+      />
+
+      {/* Hover fill */}
+      <motion.div
+        className="absolute inset-0 rounded-full -z-10"
+        style={{ backgroundColor: fillColor }}
+        animate={{ opacity: hovered ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+      />
+
+      <span className="relative z-10">{children}</span>
+    </motion.a>
+  );
+}
+
 function LatestEpisodeCard({ episode }: { episode: Episode }) {
   const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
@@ -95,47 +185,8 @@ function LatestEpisodeCard({ episode }: { episode: Episode }) {
     setIsHovered(false);
   }, []);
 
-  const cardStagger = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-    },
-  };
-
-  const itemFadeUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease },
-    },
-  };
-
-  const itemFadeLeft = {
-    hidden: { opacity: 0, x: -15 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.6, ease },
-    },
-  };
-
-  const lineDraw = {
-    hidden: { scaleX: 0 },
-    visible: {
-      scaleX: 1,
-      transition: { duration: 0.8, ease },
-    },
-  };
-
   return (
-    <motion.div
-      className="max-w-4xl mx-auto relative"
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
-      variants={cardStagger}
-    >
+    <div className="max-w-4xl mx-auto relative">
       {/* Pink background glow */}
       <div
         className="absolute -inset-8 rounded-[3rem] blur-3xl opacity-20 pointer-events-none"
@@ -204,51 +255,36 @@ function LatestEpisodeCard({ episode }: { episode: Episode }) {
             {/* Left — Title & meta */}
             <div className="flex flex-col justify-between">
               <div>
-                <motion.div
-                  className="w-10 h-px bg-hot-pink origin-left mb-5"
-                  variants={lineDraw}
-                />
-                <motion.p
-                  className="text-burgundy/40 text-xs uppercase tracking-[0.2em] mb-3"
-                  variants={itemFadeLeft}
-                >
+                <div className="w-10 h-px bg-hot-pink mb-5" />
+                <p className="text-burgundy/40 text-xs uppercase tracking-[0.2em] mb-3">
                   {episode.date}
-                </motion.p>
-                <motion.h2
-                  className="font-serif text-3xl md:text-4xl text-burgundy mb-2"
-                  variants={itemFadeLeft}
-                >
+                </p>
+                <h2 className="font-serif text-3xl md:text-4xl text-burgundy mb-2">
                   {episode.title}
-                </motion.h2>
-                <motion.p
-                  className="text-burgundy/55 text-base md:text-lg"
-                  variants={itemFadeLeft}
-                >
+                </h2>
+                <p className="text-burgundy/55 text-base md:text-lg">
                   {episode.subtitle}
-                </motion.p>
+                </p>
               </div>
             </div>
 
             {/* Right — Excerpt & CTA */}
             <div className="flex flex-col justify-between">
-              <motion.p
-                className="text-burgundy/50 text-base leading-relaxed mb-8"
-                variants={itemFadeUp}
-              >
+              <p className="text-burgundy/50 text-base leading-relaxed mb-8">
                 {episode.excerpt}
-              </motion.p>
-              <motion.div variants={itemFadeUp}>
+              </p>
+              <div>
                 <span
                   className="inline-block border border-burgundy/30 text-burgundy px-8 py-3 text-sm tracking-wider uppercase hover:bg-hot-pink hover:text-cream hover:border-hot-pink transition-all duration-300 rounded-full"
                 >
                   Read Episode &rarr;
                 </span>
-              </motion.div>
+              </div>
             </div>
           </div>
         </motion.div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -354,7 +390,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
                 A newsletter where the story is fictional but the recommendations are impeccably real.
               </p>
               <p className="font-serif text-2xl md:text-4xl text-burgundy leading-relaxed md:leading-relaxed mt-6">
-                Follow The Silver Spooners through London — then steal their taste.
+                Follow The Silver Spooners through London... then steal their taste.
               </p>
               <div className="w-16 h-px bg-hot-pink mt-12 mx-auto" />
             </div>
@@ -413,12 +449,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
         <DappledLight speed={0.8} mouseInfluence={1.2} />
       </motion.div>
 
-      {/* Section 3 — Latest Episode Feature (Liquid Glass Card) */}
-      <section className="py-24 md:py-32 px-6 relative z-10">
-        <LatestEpisodeCard episode={latestEpisode} />
-      </section>
-
-      {/* Section 4 — Senses Showcase */}
+      {/* Section 3 — Senses Showcase */}
       <section className="py-24 md:py-32 px-6 relative z-10">
         <motion.div
           className="max-w-4xl mx-auto text-center mb-16"
@@ -436,8 +467,40 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
         </motion.div>
 
         <div className="max-w-4xl mx-auto">
-          <EpisodeSensesGrid senses={latestEpisode.senses} />
+          <EpisodeSensesGrid senses={latestEpisode.senses} centerButtonHref={`/episode/${latestEpisode.slug}`} />
         </div>
+      </section>
+
+      {/* Section 3b — CTA Buttons */}
+      <section className="pb-24 md:pb-32 px-6 relative z-10">
+        <motion.div
+          className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-5"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease }}
+        >
+          <MagneticCTA
+            href={siteConfig.whatsappLink}
+            external
+            variant="pink"
+          >
+            GET SMOKY
+          </MagneticCTA>
+          <div className="md:hidden">
+            <MagneticCTA
+              href={`/episode/${latestEpisode.slug}`}
+              variant="cream"
+            >
+              Read Latest Episode
+            </MagneticCTA>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Section 4 — Latest Episode Feature (Liquid Glass Card) */}
+      <section className="py-24 md:py-32 px-6 relative z-10">
+        <LatestEpisodeCard episode={latestEpisode} />
       </section>
 
       {/* Section 5 — Recent Episodes Grid */}
@@ -511,7 +574,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
           </h2>
           <GetSmokyButton variant="dark" />
           <p className="text-burgundy/30 text-xs tracking-[0.2em] uppercase mt-16">
-            &copy; 2025 The Bixt &middot; Rituals, Reality, and Recipes
+            &copy; 2025 The Bixt
           </p>
         </motion.div>
       </section>
