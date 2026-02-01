@@ -1,9 +1,9 @@
 ---
 id: 1
 slug: "hes-engaged"
-title: "He's Engaged"
+title: "1. He's Engaged"
 subtitle: "First Loves, Phone Charms & the Jubilee Line"
-date: "Spring/Summer 2024"
+date: "19th December 2025"
 headerImage: "/content/imgs/dec_fair.jpg"
 excerpt: "The clouds above looked like the jubilee line - grey and ready to break at any moment. Birdie hopped from one foot to the other, aware that a downpour of rain would not be a way to welcome home her chocolate brown Dior."
 

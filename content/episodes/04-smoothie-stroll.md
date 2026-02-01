@@ -1,9 +1,9 @@
 ---
 id: 4
 slug: "smoothie-stroll"
-title: "Smoothie Stroll"
+title: "4. Smoothie Stroll"
 subtitle: "Saville Row, Smoothies & Sending the Text"
-date: "Week 1, 2026"
+date: "9th January 2026"
 headerImage: "/content/imgs/dec_fair.jpg"
 excerpt: "The two best of friends were on a smoothie stroll from 9 Saville Row to Battersea Park, the clouds a decorative canopy and the only witnesses to their conversation."
 

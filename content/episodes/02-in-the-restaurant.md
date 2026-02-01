@@ -1,9 +1,9 @@
 ---
 id: 2
 slug: "in-the-restaurant"
-title: "In The Restaurant"
+title: "2. In The Restaurant"
 subtitle: "Bucatini, Mary Janes & the Dessert Menu Escape"
-date: "6th July"
+date: "26th December 2025"
 headerImage: "/content/imgs/dec_fair.jpg"
 excerpt: "G was sitting across from Archie and a plate of bucatini all'Amatriciana when her boyfriend chose to continually dodge her question."
 

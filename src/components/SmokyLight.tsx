@@ -146,7 +146,7 @@ const fragmentShader = `
     color = mix(color, pinkTint, smoke * 0.12);
     color = mix(color, streakColor, (streaks + softStreaks * 0.3) * streakMask);
 
-    float alpha = intensity * 0.8;
+    float alpha = intensity * 1.0;
     gl_FragColor = vec4(color * alpha, alpha);
   }
 `;

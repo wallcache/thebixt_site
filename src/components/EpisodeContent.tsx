@@ -1,12 +1,79 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Episode } from "@/lib/episodes";
+import { Episode, Sense } from "@/lib/episodes";
 import TypewriterText from "./TypewriterText";
 import EpisodeSensesGrid from "./EpisodeSensesGrid";
 import DappledLight from "./DappledLight";
+
+function highlightReferences(
+  text: string,
+  senses: Sense[],
+  onClickRef: () => void,
+): React.ReactNode {
+  // Build a list of {start, end} match positions for all storyReferences
+  const refs = senses
+    .filter((s) => s.storyReference)
+    .map((s) => s.storyReference!);
+
+  if (refs.length === 0) return text;
+
+  const lower = text.toLowerCase();
+  const matches: { start: number; end: number }[] = [];
+
+  for (const ref of refs) {
+    const idx = lower.indexOf(ref.toLowerCase());
+    if (idx !== -1) {
+      matches.push({ start: idx, end: idx + ref.length });
+    }
+  }
+
+  if (matches.length === 0) return text;
+
+  // Sort by position and remove overlaps
+  matches.sort((a, b) => a.start - b.start);
+  const merged: { start: number; end: number }[] = [matches[0]];
+  for (let i = 1; i < matches.length; i++) {
+    const prev = merged[merged.length - 1];
+    if (matches[i].start <= prev.end) {
+      prev.end = Math.max(prev.end, matches[i].end);
+    } else {
+      merged.push(matches[i]);
+    }
+  }
+
+  // Build JSX fragments
+  const parts: React.ReactNode[] = [];
+  let cursor = 0;
+  for (const m of merged) {
+    if (cursor < m.start) {
+      parts.push(text.slice(cursor, m.start));
+    }
+    parts.push(
+      <button
+        key={m.start}
+        onClick={onClickRef}
+        className="cursor-pointer bg-transparent border-none p-0 m-0 font-inherit text-inherit text-left"
+        style={{
+          textDecoration: "underline",
+          textDecorationColor: "var(--hot-pink)",
+          textUnderlineOffset: "4px",
+          textDecorationThickness: "1px",
+        }}
+      >
+        {text.slice(m.start, m.end)}
+      </button>
+    );
+    cursor = m.end;
+  }
+  if (cursor < text.length) {
+    parts.push(text.slice(cursor));
+  }
+
+  return parts;
+}
 
 interface EpisodeContentProps {
   episode: Episode;
@@ -15,6 +82,11 @@ interface EpisodeContentProps {
 
 export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const sensesRef = useRef<HTMLDivElement>(null);
+
+  const scrollToSenses = useCallback(() => {
+    sensesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
   const currentIndex = allEpisodes.findIndex((ep) => ep.id === episode.id);
   const nextEpisode = currentIndex > 0 ? allEpisodes[currentIndex - 1] : null;
   const prevEpisode = currentIndex < allEpisodes.length - 1 ? allEpisodes[currentIndex + 1] : null;
@@ -71,14 +143,15 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
                 key={index}
                 className="text-burgundy/80 leading-relaxed mb-6"
               >
-                {paragraph}
+                {highlightReferences(paragraph, episode.senses, scrollToSenses)}
               </p>
             ))}
           </motion.div>
 
           {/* Senses Grid */}
           <motion.div
-            className="mb-16"
+            ref={sensesRef}
+            className="mb-16 scroll-mt-24"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}

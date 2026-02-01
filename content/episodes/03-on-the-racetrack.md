@@ -1,9 +1,9 @@
 ---
 id: 3
 slug: "on-the-racetrack"
-title: "On The Racetrack"
+title: "3. On The Racetrack"
 subtitle: "Engines, Pickles & Unfinished Sentences"
-date: "20th July"
+date: "2nd January 2026"
 headerImage: "/content/imgs/dec_fair.jpg"
 excerpt: "Somewhere across London, the girls were still walking around the gallery drinking mojitos, as Baz stepped onto the racetrack."
 

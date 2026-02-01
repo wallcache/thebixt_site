@@ -1,9 +1,9 @@
 ---
 id: 5
 slug: "the-boys-catch-up"
-title: "The Boys Catch Up"
+title: "5. The Boys Catch Up"
 subtitle: "Frittatas, Banter & Boots-Off Dating"
-date: "Week 2, 2026"
+date: "16th January 2026"
 headerImage: "/content/imgs/dec_fair.jpg"
 excerpt: "Archie threw his empty packet of crisps towards a nearby bin. It missed, and he trudged after it, quickly slam-dunking it inside without missing a beat in the boys' weekly catch-up."
 

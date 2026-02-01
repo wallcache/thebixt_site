@@ -20,9 +20,9 @@ interface FeaturedSense {
 export default function FeaturedPage() {
   const episodes = getAllEpisodes();
 
-  // Flatten senses from all episodes, sorted oldest first
+  // Flatten senses from all episodes, sorted newest first
   const allSenses: FeaturedSense[] = [...episodes]
-    .sort((a, b) => a.id - b.id) // oldest first
+    .sort((a, b) => b.id - a.id) // newest first
     .flatMap((ep) =>
       ep.senses.map((sense) => ({
         ...sense,

@@ -9,7 +9,6 @@ import NavLink from "./NavLink";
 
 const explorePages = [
   { href: "/brands", label: "Brands" },
-  { href: "/silver-spooners", label: "The Silver Spooners" },
   { href: "/featured", label: "Featured" },
 ];
 
@@ -135,14 +134,14 @@ export default function Navigation({ visible = true }: NavigationProps) {
                 <AnimatePresence>
                   {exploreOpen && (
                     <motion.div
-                      className="absolute top-full left-1/2 mt-3 min-w-[180px] rounded-xl shadow-lg overflow-hidden backdrop-blur-md"
-                      style={{ backgroundColor: "rgba(230, 226, 197, 0.95)", x: "-50%" }}
+                      className="absolute top-full left-1/2 mt-3 min-w-[220px] rounded-xl shadow-lg overflow-hidden"
+                      style={{ backgroundColor: "rgba(230, 226, 197, 1)", x: "-50%" }}
                       initial={{ opacity: 0, y: -4 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -4 }}
                       transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
                     >
-                      <div className="py-3 px-5 flex flex-col gap-3">
+                      <div className="py-5 px-7 flex flex-col gap-5">
                         {explorePages.map((item) => (
                           <NavLink
                             key={item.href}
@@ -223,7 +222,6 @@ export default function Navigation({ visible = true }: NavigationProps) {
             {[
               { href: "/episodes", label: "Past Episodes" },
               { href: "/brands", label: "Brands" },
-              { href: "/silver-spooners", label: "The Silver Spooners" },
               { href: "/featured", label: "Featured" },
               { href: "/about", label: "About" },
             ].map((item, i) => (
