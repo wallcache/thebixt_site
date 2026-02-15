@@ -258,7 +258,7 @@ export default function AdminContent() {
   // ---------- LOGIN GATE ----------
   if (!token) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center p-4">
+      <div className="min-h-screen -mt-20 pt-20 bg-cream flex items-center justify-center p-4">
         <form
           onSubmit={handleLogin}
           className="w-full max-w-sm bg-white/5 border border-burgundy/20 rounded-xl p-8 backdrop-blur-sm"
