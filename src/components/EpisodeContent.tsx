@@ -172,6 +172,11 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
+            {episode.foodForThought && (
+              <p className="font-serif text-lg text-burgundy/80 italic mb-6 leading-relaxed">
+                {episode.foodForThought}
+              </p>
+            )}
             <p className="text-hot-pink text-xs uppercase tracking-[0.2em] mb-4">
               Have Your Say
             </p>

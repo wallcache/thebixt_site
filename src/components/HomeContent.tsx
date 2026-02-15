@@ -480,13 +480,15 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease }}
         >
-          <MagneticCTA
-            href={siteConfig.whatsappLink}
-            external
-            variant="pink"
-          >
-            GET SMOKY
-          </MagneticCTA>
+          <div className="hidden md:block">
+            <MagneticCTA
+              href={siteConfig.whatsappLink}
+              external
+              variant="pink"
+            >
+              GET SMOKY
+            </MagneticCTA>
+          </div>
           <div className="md:hidden">
             <MagneticCTA
               href={`/episode/${latestEpisode.slug}`}
