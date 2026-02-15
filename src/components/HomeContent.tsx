@@ -346,7 +346,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
   // Rain fades in as we pass through the O portal
   const rainOpacity = useTransform(heroProgress, [0.1, 0.3], [0, 1]);
   // Hero background fades to transparent so rain shows through
-  const heroBgOpacity = useTransform(heroProgress, [0.15, 0.4], [1, 0]);
+  const heroBgOpacity = useTransform(heroProgress, [0.3, 0.55], [1, 0]);
   const heroBg = useTransform(heroBgOpacity, (o) => `rgba(8, 30, 40, ${o})`);
 
   // Delay smoky light fade-in until after loading screen (~2.2s)
