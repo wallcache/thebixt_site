@@ -52,10 +52,13 @@ function highlightReferences(
       parts.push(text.slice(cursor, m.start));
     }
     parts.push(
-      <button
+      <span
         key={m.start}
         onClick={onClickRef}
-        className="cursor-pointer bg-transparent border-none p-0 m-0 font-inherit text-inherit text-left"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onClickRef(); }}
+        className="cursor-pointer"
         style={{
           textDecoration: "underline",
           textDecorationColor: "var(--hot-pink)",
@@ -64,7 +67,7 @@ function highlightReferences(
         }}
       >
         {text.slice(m.start, m.end)}
-      </button>
+      </span>
     );
     cursor = m.end;
   }
@@ -126,9 +129,6 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
             <h1 className="font-serif text-3xl md:text-4xl text-burgundy mb-4">
               <TypewriterText text={episode.title} wordByWord />
             </h1>
-            <p className="text-burgundy/70 text-lg">
-              <TypewriterText text={episode.subtitle} wordByWord delay={0.3} />
-            </p>
           </header>
 
           <motion.div
