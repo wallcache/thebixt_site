@@ -1,7 +1,7 @@
 ---
 id: 7
 slug: "love-letters"
-title: "7. Love Letters"
+title: "Love Letters"
 subtitle: "Handbags, Flat Whites & Broken Agreements"
 date: "30th January 2026"
 headerImage: "/content/imgs/dec_fair.jpg"
@@ -50,4 +50,6 @@ Birdie rolled her eyes and began to stand. She already knew this tone and couldn
 
 'Find me when you're ready to apologise.' Bea said, reaching for her handbag again. 'We had an agreement, Baz. And you broke it.'
 
-As Baz opened his mouth to defend himself, Bea cut in, 'Writing Love letters was simply off the table, Basil. We agreed.' And just like that, as quickly as it had started, the conversation was over. Bea began walking away, looking back at her outstretched chair. She looked Baz in the eye to add 'I saw them. Over Coffee. With her.' Leaving Baz opened mouth and speechless, Bea's raised eyebrow and new Chanel bag left the bar.
+As Baz opened his mouth to defend himself, Bea cut in,
+
+'Writing Love letters was simply off the table, Basil. We agreed.' And just like that, as quickly as it had started, the conversation was over. Bea began walking away, looking back at her outstretched chair. She looked Baz in the eye to add 'I saw them. Over Coffee. With her.' Leaving Baz opened mouth and speechless, Bea's raised eyebrow and new Chanel bag left the bar.

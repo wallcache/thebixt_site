@@ -1,7 +1,7 @@
 ---
 id: 3
 slug: "on-the-racetrack"
-title: "3. On The Racetrack"
+title: "On The Racetrack"
 subtitle: "Engines, Pickles & Unfinished Sentences"
 date: "2nd January 2026"
 headerImage: "/content/imgs/dec_fair.jpg"

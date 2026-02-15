@@ -1,7 +1,7 @@
 ---
 id: 6
 slug: "the-text"
-title: "6. The Text"
+title: "The Text"
 subtitle: "Queues, Orchids & An Unwanted Text"
 date: "23rd January 2026"
 headerImage: "/content/imgs/dec_fair.jpg"

@@ -1,7 +1,7 @@
 ---
 id: 1
 slug: "hes-engaged"
-title: "1. He's Engaged"
+title: "He's Engaged"
 subtitle: "First Loves, Phone Charms & the Jubilee Line"
 date: "19th December 2025"
 headerImage: "/content/imgs/dec_fair.jpg"

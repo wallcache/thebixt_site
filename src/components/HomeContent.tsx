@@ -257,7 +257,7 @@ function LatestEpisodeCard({ episode }: { episode: Episode }) {
               <div>
                 <div className="w-10 h-px bg-hot-pink mb-5" />
                 <p className="text-burgundy/40 text-xs uppercase tracking-[0.2em] mb-3">
-                  {episode.date}
+                  Episode {episode.id}
                 </p>
                 <h2 className="font-serif text-3xl md:text-4xl text-burgundy mb-2">
                   {episode.title}
@@ -334,8 +334,8 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
 
   // Zoom IN: starts at 1x, scales up to 50x over the scroll
   const heroScale = useTransform(heroProgress, [0, 0.7], [1, 50]);
-  // Text fades out as it zooms past the viewer
-  const textOpacity = useTransform(heroProgress, [0.3, 0.6], [1, 0]);
+  // Text fades out as it zooms past the viewer — disappears before scaling clips it
+  const textOpacity = useTransform(heroProgress, [0.1, 0.3], [1, 0]);
   // Circular clip-path expands to reveal portal content through the O
   const circleRadius = useTransform(heroProgress, [0.05, 0.65], [0, 110]);
   const clipPath = useTransform(circleRadius, (r) => `circle(${r}% at ${clipCenterRef.current})`);
@@ -387,7 +387,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
           >
             <div className="max-w-[800px] text-center">
               <p className="font-serif text-2xl md:text-4xl text-burgundy leading-relaxed md:leading-relaxed">
-                A newsletter where the story is fictional but the recommendations are impeccably real.
+                A newsletter where the story could be fictional but the recommendations are impeccably real.
               </p>
               <p className="font-serif text-2xl md:text-4xl text-burgundy leading-relaxed md:leading-relaxed mt-6">
                 Follow The Silver Spooners through London... then steal their taste.
@@ -407,7 +407,7 @@ export default function HomeContent({ latestEpisode, recentEpisodes }: HomeConte
               }}
             >
               <h1 className="font-serif text-5xl md:text-7xl text-burgundy tracking-[0.15em] whitespace-nowrap">
-                SM<span ref={oRef}>O</span>KY<span className="text-hot-pink">.</span>
+                SM<span ref={oRef}>O</span>KY<Link href="/admin" className="text-hot-pink pointer-events-auto" style={{ textDecoration: 'none' }}>.</Link>
               </h1>
             </motion.div>
           </div>

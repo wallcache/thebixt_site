@@ -130,10 +130,10 @@ const fragmentShader = `
     softStreaks *= streakMask;
 
     // Final intensity — brighter overall
-    float intensity = lightThrough * 0.32 * (0.3 + radialFalloff * 0.7);
-    intensity += edgeGlow * (0.4 + radialFalloff * 0.6);
-    intensity += streaks * 0.4 + softStreaks * 0.18;
-    intensity -= shadow * 0.08;
+    float intensity = lightThrough * 0.44 * (0.3 + radialFalloff * 0.7);
+    intensity += edgeGlow * (0.55 + radialFalloff * 0.6);
+    intensity += streaks * 0.55 + softStreaks * 0.25;
+    intensity -= shadow * 0.06;
     intensity = clamp(intensity, 0.0, 1.0);
 
     // Warm cream/amber palette with subtle pink — warmer near light source

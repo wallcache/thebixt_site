@@ -1,7 +1,7 @@
 ---
 id: 4
 slug: "smoothie-stroll"
-title: "4. Smoothie Stroll"
+title: "Smoothie Stroll"
 subtitle: "Saville Row, Smoothies & Sending the Text"
 date: "9th January 2026"
 headerImage: "/content/imgs/dec_fair.jpg"

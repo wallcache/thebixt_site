@@ -133,6 +133,7 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
 
           <motion.div
             className="prose prose-invert mb-16"
+            style={{ fontFamily: "var(--font-body)" }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -163,23 +164,24 @@ export default function EpisodeContent({ episode, allEpisodes }: EpisodeContentP
             <EpisodeSensesGrid senses={episode.senses} />
           </motion.div>
 
-          {/* Food for Thought */}
-          {episode.foodForThought && (
-            <motion.div
-              className="my-12 py-8 border-t border-b border-burgundy/15"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+          {/* Have Your Say */}
+          <motion.div
+            className="my-12 py-8 border-t border-b border-burgundy/15 text-center"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <p className="text-hot-pink text-xs uppercase tracking-[0.2em] mb-4">
+              Have Your Say
+            </p>
+            <a
+              href="mailto:alex.meits@thebixt.com"
+              className="inline-block border border-hot-pink/60 text-burgundy px-8 py-3 text-sm tracking-wider uppercase hover:bg-hot-pink hover:text-cream hover:border-hot-pink transition-all duration-300 rounded-full"
             >
-              <p className="text-hot-pink text-xs uppercase tracking-[0.2em] mb-4">
-                Food for Thought
-              </p>
-              <p className="font-serif text-lg md:text-xl text-burgundy/80 italic leading-relaxed">
-                {episode.foodForThought}
-              </p>
-            </motion.div>
-          )}
+              Get In Touch
+            </a>
+          </motion.div>
         </article>
 
         {/* Footer */}

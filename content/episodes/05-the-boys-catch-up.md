@@ -1,7 +1,7 @@
 ---
 id: 5
 slug: "the-boys-catch-up"
-title: "5. The Boys Catch Up"
+title: "The Boys Catch Up"
 subtitle: "Frittatas, Banter & Boots-Off Dating"
 date: "16th January 2026"
 headerImage: "/content/imgs/dec_fair.jpg"

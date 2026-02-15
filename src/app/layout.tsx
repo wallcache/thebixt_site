@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond, Reenie_Beanie } from "next/font/google";
+import { Inter, Cormorant_Garamond, Libre_Baskerville, Reenie_Beanie } from "next/font/google";
 import "./globals.css";
 import ClientWrapper from "@/components/ClientWrapper";
 
@@ -12,6 +12,12 @@ const cormorant = Cormorant_Garamond({
   variable: "--font-serif",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+const libreBaskerville = Libre_Baskerville({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 const reenieBeanie = Reenie_Beanie({
@@ -37,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${cormorant.variable} ${reenieBeanie.variable} antialiased`}
+        className={`${inter.variable} ${cormorant.variable} ${libreBaskerville.variable} ${reenieBeanie.variable} antialiased`}
       >
         <ClientWrapper>{children}</ClientWrapper>
       </body>

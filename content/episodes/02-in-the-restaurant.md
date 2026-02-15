@@ -1,7 +1,7 @@
 ---
 id: 2
 slug: "in-the-restaurant"
-title: "2. In The Restaurant"
+title: "In The Restaurant"
 subtitle: "Bucatini, Mary Janes & the Dessert Menu Escape"
 date: "26th December 2025"
 headerImage: "/content/imgs/dec_fair.jpg"
