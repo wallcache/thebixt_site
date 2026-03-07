@@ -3,7 +3,7 @@ id: 8
 slug: the-show-down
 title: The Show Down
 subtitle: 'Coffee, Confrontation and a forever after apology? '
-date: '---'
+date: 'Episode: '
 headerImage: /content/imgs/dec_fair.jpg
 excerpt: >-
   He was sitting there when Bea and her long legs arrived.
@@ -77,4 +77,4 @@ Baz looked flustered, his usually perfectly laundered white shirt, a little ruff
 
 As Baz opened his mouth to defend himself, Bea cut in, ‘Writing Love letters was simply off the table, Basil. We agreed.’ And just like that, as quickly as it had started, the conversation was over. 
 
-Bea began walking away, looking back at her outstretched chair. She looked Baz in the eye to add ‘I saw them. Over Coffee. With her.’ Leaving Baz opened mouthed and speechless, Bea's raised eyebrow and new Chanel bag left the bar. 
+Bea began walking away, looking back at her outstretched chair. She looked Baz in the eye to add ‘I saw them. Over Coffee. With her.’ Leaving Baz opened mouthed and speechless, Bea's raised eyebrow and new Chanel bag left the bar.
