@@ -15,7 +15,7 @@ senses:
     storyReference: 'What about a holiday? - Mags tried '
     link: 'https://www.nationaltheatre.org.uk/productions/summerfolk/'
   - type: taste
-    brand: Agolde x MARIA MCMANUS Collab
+    brand: Agolde x Maria McManus Collab
     description: "Agolde and Irish designer Maria McManus unite in a sustainable capsule of sharp, timeless, responsibly made pieces.”Smoky approved:\_Circle skirt - wash powder pink skirt\_"
     storyReference: We're going in circles
     link: 'https://agolde.com/products/circle-skirt-stone-wash-powder-pink'
