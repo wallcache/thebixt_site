@@ -3,7 +3,7 @@ id: 3
 slug: on-the-racetrack
 title: On The Racetrack
 subtitle: 'Engines, Pickles & Unfinished Sentences'
-date: 'Episode: On The Racetrack'
+date: 'Episode: '
 headerImage: /content/imgs/dec_fair.jpg
 excerpt: >-
   Somewhere across London, the girls were still walking around the gallery
