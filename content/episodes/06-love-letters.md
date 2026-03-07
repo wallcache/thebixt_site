@@ -1,37 +1,46 @@
 ---
 id: 6
-slug: "love-letters"
-title: "Love Letters"
-subtitle: "Handbags, Flat Whites & Broken Agreements"
-date: "30th January 2026"
-headerImage: "/content/imgs/dec_fair.jpg"
-excerpt: "He was sitting there when Bea and her long legs arrived. In preparation for this meeting, Bea had selectively bought herself the ultimate weapon: a new handbag, a copy of the FT Weekender and a portable charger."
-
+slug: love-letters
+title: Love Letters
+subtitle: 'Handbags, Flat Whites & Broken Agreements'
+date: 'Episode: '
+headerImage: /content/imgs/dec_fair.jpg
+excerpt: >-
+  He was sitting there when Bea and her long legs arrived. In preparation for
+  this meeting, Bea had selectively bought herself the ultimate weapon: a new
+  handbag, a copy of the FT Weekender and a portable charger.
 senses:
-  - type: "taste"
-    brand: "Newman, The Gambit Bar"
-    description: "Newman at The Gambit Bar. Where flat whites come with cinnamon and chocolate on top."
-    storyReference: "Her already waiting flat white"
-    link: "https://gambitbar.com/"
-  - type: "see"
-    brand: "Love Letters, The National Archive"
-    description: "Love Letters at The National Archive. Writing them was simply off the table."
-    storyReference: "Writing love letters was simply off the table, Basil"
-    link: "https://www.nationalarchives.gov.uk/whats-on/exhibitions/love-letters/"
-  - type: "grab"
-    brand: "White Shirt"
-    description: "The perfectly laundered white shirt. A wardrobe staple, even when a little ruffled."
-    storyReference: "His usually perfectly laundered white shirt, a little ruffled"
-    link: ""
-  - type: "hear"
-    brand: "Sheer Luxe Has Been Bought"
-    description: "Sheer Luxe has been bought. The podcast that gets you through the tube ride home."
-    storyReference: "Sheer Luxe's latest podcast for a tube journey distraction"
-    link: "https://futureplc.com/news/future-acquires-sheerluxe/"
-
-foodForThought: "If you had an agreement with someone, and they broke it, would you hear them out or walk away like Bea?"
+  - type: taste
+    brand: 'Newman, The Gambit Bar'
+    description: >-
+      Newman at The Gambit Bar. Where flat whites come with cinnamon and
+      chocolate on top.
+    storyReference: Her already waiting flat white
+    link: 'https://gambitbar.com/'
+  - type: see
+    brand: 'Love Letters, The National Archive'
+    description: >-
+      Love Letters at The National Archive. Writing them was simply off the
+      table.
+    storyReference: 'Writing love letters was simply off the table, Basil'
+    link: 'https://www.nationalarchives.gov.uk/whats-on/exhibitions/love-letters/'
+  - type: grab
+    brand: White Shirt
+    description: >-
+      The perfectly laundered white shirt. A wardrobe staple, even when a little
+      ruffled.
+    storyReference: 'His usually perfectly laundered white shirt, a little ruffled'
+  - type: hear
+    brand: Sheer Luxe Has Been Bought
+    description: >-
+      Sheer Luxe has been bought. The podcast that gets you through the tube
+      ride home.
+    storyReference: Sheer Luxe's latest podcast for a tube journey distraction
+    link: 'https://futureplc.com/news/future-acquires-sheerluxe/'
+foodForThought: >-
+  If you had an agreement with someone, and they broke it, would you hear them
+  out or walk away like Bea?
 ---
-
 He was sitting there when Bea and her long legs arrived.
 
 In preparation for this meeting, Bea had selectively bought herself the ultimate weapon: a new handbag, a copy of the FT Weekender and a portable charger for listening to Sheer Luxe's latest podcast for a tube journey distraction until she reached the safety haven of home, aka Holland Park.
