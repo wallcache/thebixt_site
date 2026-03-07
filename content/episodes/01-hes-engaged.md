@@ -1,36 +1,47 @@
 ---
 id: 1
-slug: "hes-engaged"
-title: "He's Engaged"
-subtitle: "First Loves, Phone Charms & the Jubilee Line"
-date: "19th December 2025"
-headerImage: "/content/imgs/dec_fair.jpg"
-excerpt: "The clouds above looked like the jubilee line - grey and ready to break at any moment. Birdie hopped from one foot to the other, aware that a downpour of rain would not be a way to welcome home her chocolate brown Dior."
-
+slug: hes-engaged
+title: He's Engaged
+subtitle: 'First Loves, Phone Charms & the Jubilee Line'
+date: 'Episode: He''s Engaged!'
+headerImage: /content/imgs/dec_fair.jpg
+excerpt: >-
+  The clouds above looked like the jubilee line - grey and ready to break at any
+  moment. Birdie hopped from one foot to the other, aware that a downpour of
+  rain would not be a way to welcome home her chocolate brown Dior.
 senses:
-  - type: "taste"
-    brand: "Crust, Dean Street"
-    description: "New Dean Street food spot. Get your toastie tastebuds at the ready."
-    storyReference: "a crust of sourdough"
-    link: "https://www.crustbros.co.uk/"
-  - type: "hear"
-    brand: "The Kooks New Album"
-    description: "An upcoming tour for all of their classics AND a release of their 7th NEW ALBUM."
-    link: "https://thekooks.com/"
-  - type: "see"
-    brand: "House Of By Ro"
-    description: "Think Dior bag rentals, furniture and accessories for dreamy purchases, thanks to ByRotation's 5 storey pop up. 31 Brook Street, Mayfair W1K 4HF, Wednesday-Sunday 12-6pm"
-    storyReference: "her chocolate brown Dior"
-    link: "https://journal.byrotation.com/the-house-of-byro-mayfair/"
-  - type: "grab"
-    brand: "String Ting Phone Charms"
-    description: "Handcrafted by 11 women (and Nike the Havanese pup) in South London to true crime podcasts. Rachel and her team have donated more than £35,000 to refugee, homeless and individual cause charities to date. If it's good enough for B and Dua Lipa, it's good enough for us."
-    storyReference: "snatching at her phone charm"
-    link: "https://stringting.com"
-
-foodForThought: "How much acknowledgement should your first love get? Are they shaping you, or can you leave your trauma from that time your first ex cheated on you?"
+  - type: taste
+    brand: 'Crust, Dean Street'
+    description: New Dean Street food spot. Get your toastie tastebuds at the ready.
+    storyReference: a crust of sourdough
+    link: 'https://www.crustbros.co.uk/'
+  - type: hear
+    brand: The Kooks New Album
+    description: >-
+      An upcoming tour for all of their classics AND a release of their 7th NEW
+      ALBUM.
+    link: 'https://thekooks.com/'
+  - type: see
+    brand: House Of By Ro
+    description: >-
+      Think Dior bag rentals, furniture and accessories for dreamy purchases,
+      thanks to ByRotation's 5 storey pop up. 31 Brook Street, Mayfair W1K 4HF,
+      Wednesday-Sunday 12-6pm
+    storyReference: her chocolate brown Dior
+    link: 'https://journal.byrotation.com/the-house-of-byro-mayfair/'
+  - type: grab
+    brand: String Ting Phone Charms
+    description: >-
+      Handcrafted by 11 women (and Nike the Havanese pup) in South London to
+      true crime podcasts. Rachel and her team have donated more than £35,000 to
+      refugee, homeless and individual cause charities to date. If it's good
+      enough for B and Dua Lipa, it's good enough for us.
+    storyReference: snatching at her phone charm
+    link: 'https://stringting.com'
+foodForThought: >-
+  How much acknowledgement should your first love get? Are they shaping you, or
+  can you leave your trauma from that time your first ex cheated on you?
 ---
-
 The clouds above looked like the jubilee line — grey and ready to break at any moment. Birdie hopped from one foot to the other aware that a downpour of rain would not be a way to welcome home her chocolate brown Dior. Flipping the clasp open she instinctively pulled her phone out and swiped to pass the time. B missed the one-legged pigeon fighting for a crust of sourdough and the homeless man playing on his iPhone. B missed the toddler conked out in his pram as the family strolled past and she nearly missed her best friend's arrival.
 
 'Beatrice Aelfric, early! I never thought I'd see the day' Felicity Bhat tittered as they embraced.
