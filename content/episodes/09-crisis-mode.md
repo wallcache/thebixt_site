@@ -3,7 +3,7 @@ id: 9
 slug: crisis-mode
 title: Crisis Mode
 subtitle: 'Cabo, Catch Up and Crisis Mode '
-date: '---'
+date: 'Episode: '
 headerImage: /content/imgs/dec_fair.jpg
 excerpt: "The girls gathered around, they were in crisis mode.\_\n“What about a holiday?”\_Mags tried\_"
 senses:
