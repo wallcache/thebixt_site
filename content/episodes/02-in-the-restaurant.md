@@ -3,7 +3,7 @@ id: 2
 slug: in-the-restaurant
 title: In The Restaurant
 subtitle: 'Bucatini, Mary Janes & the Dessert Menu Escape'
-date: 'Episode: He''s Engaged!'
+date: 'Episode: '
 headerImage: /content/imgs/dec_fair.jpg
 excerpt: >-
   G was sitting across from Archie and a plate of bucatini all'Amatriciana when
