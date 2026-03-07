@@ -12,7 +12,7 @@ senses:
     description: >-
       Summerfolk at The National Theatre transforms a holiday retreat into a
       stage of simmering drama and delicate heartbreak.
-    storyReference: 'What about a holiday? Mags tried '
+    storyReference: 'What about a holiday? - Mags tried '
     link: 'https://www.nationaltheatre.org.uk/productions/summerfolk/'
   - type: taste
     brand: Agolde x MARIA MCMANUS Collab
@@ -24,12 +24,12 @@ senses:
     description: >-
       Latest Apple Music Harry Styles Interview with Zane Lowe 'Kiss All The
       Time, Disco Occasionally. 
-    storyReference: "‘Do you think he kissed her at the festival that time\_"
+    storyReference: "Do you think he kissed her at the festival that time\_"
     link: 'https://www.youtube.com/watch?v=oTA637pJ63Y'
   - type: taste
     brand: 'Heard x Akoko '
     description: "Quality Food, Michelin Standard, Reasonable Prices. Jordan Bailey and Akoko’s founder, Aji Akokomi Fine Dining Burgers at Heard (Soho and Borough).\_\_"
-    storyReference: '''You just need something to eat'' G Cooed '
+    storyReference: 'You just need something to eat - G Cooed '
     link: 'https://heardburger.co.uk/heardxakoko'
 foodForThought: 'Sunshine and a fresh perspective, does a holiday solve everything? '
 ---
