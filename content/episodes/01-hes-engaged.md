@@ -3,7 +3,7 @@ id: 1
 slug: hes-engaged
 title: He's Engaged
 subtitle: 'First Loves, Phone Charms & the Jubilee Line'
-date: 'Episode: He''s Engaged!'
+date: 'Episode: '
 headerImage: /content/imgs/dec_fair.jpg
 excerpt: >-
   The clouds above looked like the jubilee line - grey and ready to break at any
