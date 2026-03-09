@@ -43,42 +43,8 @@ senses:
       Canary Wharf and Waitrose Cheltenham).
     storyReference: >-
       Relationships are a living thing, you need to give it room to breath and
-      grow- Archie 
+      grow- Archie
     link: 'https://www.instagram.com/drinklivingthings/?hl=en'
-  - type: grab
-    brand: 'Wax London '
-    description: >-
-      London‑based menswear brand championing slow fashion and sustainability by
-      using responsibly sourced materials and ethical production to create
-      timeless, characterful pieces that are designed to be worn again and
-      again. It has also caught the eye of style‑savvy celebrities like Bradley
-      Cooper, Ryan Reynolds, Chris Evans and The Smoky Boys
-
-
-      Baz: Dean - Off White Scribble Text T-Shirt
-
-      https://waxlondon.com/collections/spring-26-collection/products/dean-off-white-scribble-text-t-shirt
-      £60 
-
-
-      Max: Belle - Green Tipped Pointelle Polo Shirt with Spencer - Washed Brown
-      Heavy Cotton Twill Sports Cap
-
-
-      https://waxlondon.com/collections/spring-26-collection/products/spencer-washed-brown-heavy-cotton-twill-sports-cap
-      £35
-
-      https://waxlondon.com/collections/spring-26-collection/products/belle-green-tipped-pointelle-polo-shirt
-      £135 
-
-
-      Archie: Shore - Navy Textured Long-Sleeve Polo Shirt
-
-      https://waxlondon.com/collections/spring-26-collection/products/shore-navy-textured-long-sleeve-polo-shirt
-      £65 
-    storyReference: 'Wax London - As worn by the boys '
-    link: >-
-      https://waxlondon.com/?utm_source=google&utm_medium=cpc&dema_id=648571361&tw_source=google&tw_adid=570322144058&tw_campaign=648571361&tw_kwdid=kwd-297059902790&gad_source=1&gad_campaignid=648571361&gbraid=0AAAAADQohI0c98YROSaTVEv7t2W3taZsw&gclid=Cj0KCQjw37nNBhDkARIsAEBGI8OYoxhsht9KOPXvB93hqKG8FqZCNgMqslnYmyKnVk7mmRFYTzTimYQaAopvEALw_wcB
 foodForThought: 'Can you recover from an open relationship hiccup? '
 ---
 “Boys, you need to help — I’m falling apart,” Baz’s muffled sentence came from behind a cushion.
