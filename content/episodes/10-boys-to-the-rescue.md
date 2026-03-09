@@ -42,9 +42,8 @@ senses:
       “Nail Bar” lets shoppers try the soda while getting manicures (Waitrose
       Canary Wharf and Waitrose Cheltenham).
     storyReference: >-
-      ‘Relationships are a living thing, you need to give it room to breath and
-      grow - each arguement will either bring you closer together or push you
-      apart, play your next move carefully’ - Archie 
+      Relationships are a living thing, you need to give it room to breath and
+      grow- Archie 
     link: 'https://www.instagram.com/drinklivingthings/?hl=en'
   - type: grab
     brand: 'Wax London '
